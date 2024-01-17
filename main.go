@@ -16,13 +16,14 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// prod parse all, dev parse on request
+	tmpl := template.Must(template.ParseFiles("./templates/views/index.html", "./templates/components/head.html"))
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := template.ParseFiles("templates/index.html")
-		err = tmpl.Execute(w, map[string]interface{}{
+		err := tmpl.Execute(w, map[string]interface{}{
 			"Name": "Cloud",
 		})
 		if err != nil {
-			log.Println("Error writing response")
 			return
 		}
 	})
