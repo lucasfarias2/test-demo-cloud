@@ -2,3 +2,4 @@ cloud
 tmp
 .idea
 .env
+node_modules

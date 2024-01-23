@@ -2,6 +2,13 @@
 <html lang="en">
 {{ template "head.html" . }}
 <body>
-<h1>Home</h1>
-<p>Hi, {{ .Name }}!</p>
+
+{{ template "navbar.html" . }}
+
+
+<main class="px-32 py-8">
+    <h1>{{ .PageTitle }}</h1>
+</main>
+
 </body>
+</html>

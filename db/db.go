@@ -16,9 +16,8 @@ func ConnectDatabase() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
-	dbSSLMode := os.Getenv("DB_SSLMODE")
 
-	connectionString := fmt.Sprintf("user=%s dbname=%s sslmode=%s password=%s host=%s port=%s", dbUser, dbName, dbSSLMode, dbPassword, dbHost, dbPort)
+	connectionString := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s", dbUser, dbName, dbPassword, dbHost, dbPort)
 
 	db, err = sql.Open("postgres", connectionString)
 	if err != nil {

@@ -9,6 +9,17 @@ import (
 	"os"
 )
 
+type PageData struct {
+	Name      string
+	PageTitle string
+}
+
+var templateFiles = []string{
+	"./templates/views/index.html",
+	"./templates/components/head.html",
+	"./templates/components/navbar.html",
+}
+
 func main() {
 	if err := utils.LoadEnv(".env"); err != nil {
 		panic(err)
@@ -20,17 +31,19 @@ func main() {
 	var tmpl *template.Template
 
 	if os.Getenv("APP_ENV") != "development" {
-		tmpl = template.Must(template.ParseFiles("./templates/views/index.html", "./templates/components/head.html"))
+		tmpl = template.Must(template.ParseFiles(templateFiles...))
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("APP_ENV") == "development" {
-			tmpl = template.Must(template.ParseFiles("./templates/views/index.html", "./templates/components/head.html"))
+			tmpl = template.Must(template.ParseFiles(templateFiles...))
 		}
 
-		err := tmpl.Execute(w, map[string]interface{}{
-			"Name": "Cloud he",
+		err := tmpl.Execute(w, PageData{
+			Name:      "Cloud he",
+			PageTitle: "Packlify",
 		})
+
 		if err != nil {
 			return
 		}
