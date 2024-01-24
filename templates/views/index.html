@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-{{ template "head.html" . }}
-<body>
-
-{{ template "navbar.html" . }}
-
-
-<main class="px-32 py-8">
+{{ define "content" }}
+<div class="px-32 py-8">
     <h1>{{ .PageTitle }}</h1>
-</main>
-
-</body>
-</html>
+</div>
+{{ end }}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cloud/handlers"
 	"cloud/utils"
 	"fmt"
 	"html/template"
@@ -10,14 +11,17 @@ import (
 )
 
 type PageData struct {
-	Name      string
-	PageTitle string
+	Name       string
+	PageTitle  string
+	CurrentUrl string
+	IsDev      bool
 }
 
 var templateFiles = []string{
 	"./templates/views/index.html",
 	"./templates/components/head.html",
 	"./templates/components/navbar.html",
+	"./templates/components/layout.html",
 }
 
 func main() {
@@ -30,24 +34,28 @@ func main() {
 
 	var tmpl *template.Template
 
-	if os.Getenv("APP_ENV") != "development" {
+	if os.Getenv("APP_ENV") == "production" {
 		tmpl = template.Must(template.ParseFiles(templateFiles...))
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if os.Getenv("APP_ENV") == "development" {
+		if os.Getenv("APP_ENV") != "production" {
 			tmpl = template.Must(template.ParseFiles(templateFiles...))
 		}
 
-		err := tmpl.Execute(w, PageData{
-			Name:      "Cloud he",
-			PageTitle: "Packlify",
+		err := tmpl.ExecuteTemplate(w, "layout.html", PageData{
+			Name:       "Cloud he",
+			PageTitle:  "Packlify",
+			CurrentUrl: r.URL.Path,
+			IsDev:      os.Getenv("APP_ENV") != "production",
 		})
-
 		if err != nil {
+			log.Println("Error:", err)
 			return
 		}
 	})
+
+	http.HandleFunc("/ws", handlers.HandleHotReloadWS)
 
 	fmt.Println("Server running on port 8080")
 
