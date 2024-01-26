@@ -5,6 +5,8 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 var upgrader = websocket.Upgrader{
@@ -18,14 +20,14 @@ var upgrader = websocket.Upgrader{
 func HandleHotReloadWS(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer ws.Close()
 
 	// Watch for changes in the templates folder
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer watcher.Close()
 
@@ -49,7 +51,15 @@ func HandleHotReloadWS(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	err = watcher.Add("../templates")
+	err = filepath.Walk(filepath.Join(".", "templates"), func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if filepath.Ext(path) == ".html" {
+			return watcher.Add(path)
+		}
+		return nil
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
