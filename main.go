@@ -54,7 +54,9 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/ws", handlers.HandleHotReloadWS)
+	if os.Getenv("APP_ENV") != "production" {
+		http.HandleFunc("/ws", handlers.HandleHotReloadWS)
+	}
 
 	fmt.Println("Server running on port 8080")
 

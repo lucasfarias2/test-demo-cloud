@@ -9,6 +9,7 @@
     <script src="/static/htmx.min.js"></script>
 
     {{if .IsDev}}
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         function updateContent(templateID, newContent) {
             document.getElementById("content").innerHTML = newContent;
@@ -33,6 +34,8 @@
 
         connectDevServer();
     </script>
+    {{ else }}
+    <link rel="stylesheet" href="/static/dist/tailwind.css"/>
     {{ end }}
 </head>
 
