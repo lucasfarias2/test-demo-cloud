@@ -44,7 +44,6 @@ func main() {
 		}
 
 		err := tmpl.ExecuteTemplate(w, "layout.html", PageData{
-			Name:       "Cloud he",
 			PageTitle:  "Packlify",
 			CurrentUrl: r.URL.Path,
 			IsDev:      os.Getenv("APP_ENV") != "production",

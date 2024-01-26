@@ -10,19 +10,28 @@
 
     {{if .IsDev}}
     <script>
-        const socket = new WebSocket('ws://localhost:8080/ws');
-
-        socket.onmessage = function (event) {
-            const message = event.data;
-            console.log(message);
-            fetch("{{.CurrentUrl}}").then(response => response.text()).then(data => {
-                updateContent("a", data);
-            });
-        };
-
         function updateContent(templateID, newContent) {
             document.getElementById("content").innerHTML = newContent;
         }
+
+        function connectDevServer() {
+            const socket = new WebSocket('ws://localhost:8080/ws');
+
+            socket.onmessage = function (event) {
+                const message = event.data;
+                console.log(message);
+                fetch("{{.CurrentUrl}}").then(response => response.text()).then(data => {
+                    updateContent("a", data);
+                });
+            };
+
+            socket.onclose = function () {
+                console.log('WebSocket connection closed. Attempting to reconnect...');
+                setTimeout(connectDevServer, 100); // Try to reconnect after 100 ms
+            }
+        }
+
+        connectDevServer();
     </script>
     {{ end }}
 </head>
