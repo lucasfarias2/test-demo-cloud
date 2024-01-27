@@ -18,10 +18,10 @@ type PageData struct {
 }
 
 var templateFiles = []string{
-	"./templates/views/index.html",
-	"./templates/components/head.html",
-	"./templates/components/navbar.html",
-	"./templates/components/layout.html",
+	"./templates/views/index.gohtml",
+	"./templates/views/login.gohtml",
+	"./templates/components/head.gohtml",
+	"./templates/components/navbar.gohtml",
 }
 
 func main() {
@@ -43,8 +43,24 @@ func main() {
 			tmpl = template.Must(template.ParseFiles(templateFiles...))
 		}
 
-		err := tmpl.ExecuteTemplate(w, "layout.html", PageData{
+		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
 			PageTitle:  "Packlify",
+			CurrentUrl: r.URL.Path,
+			IsDev:      os.Getenv("APP_ENV") != "production",
+		})
+		if err != nil {
+			log.Println("Error:", err)
+			return
+		}
+	})
+
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		if os.Getenv("APP_ENV") != "production" {
+			tmpl = template.Must(template.ParseFiles(templateFiles...))
+		}
+
+		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
+			PageTitle:  "Login - Packlify",
 			CurrentUrl: r.URL.Path,
 			IsDev:      os.Getenv("APP_ENV") != "production",
 		})
