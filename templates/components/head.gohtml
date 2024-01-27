@@ -11,19 +11,15 @@
         {{if .IsDev}}
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
-            function updateContent(templateID, newContent) {
-                document.getElementById("content").innerHTML = newContent;
-            }
-
             function connectDevServer() {
                 const socket = new WebSocket('ws://localhost:8080/ws');
 
                 socket.onmessage = function (event) {
                     const message = event.data;
-                    console.log(message);
-                    fetch("{{.CurrentUrl}}").then(response => response.text()).then(data => {
-                        updateContent("a", data);
-                    });
+
+                    if (message === "reload") {
+                        htmx.ajax('GET', "{{.CurrentUrl}}", "body");
+                    }
                 };
 
                 socket.onclose = function () {

@@ -1,14 +1,13 @@
 {{ define "navbar" }}
 
-    <nav class="h-16 lg:px-32 px-4 flex items-center justify-between relative">
+    <nav class="h-16 lg:px-32 px-4 flex items-center justify-between relative shadow">
         <div class="flex items-center justify-center">
             <a href="/"><img src="/static/logo.png" alt="Packlify logo" class="h-8 mr-8"/></a>
             <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2">Home</a>
-            <a href="/about" class="p-2 mr-2">About</a>
         </div>
         <div>
             <a href="/login" hx-get="/login" hx-target="body" class="p-2 mr-2" hx-push-url="true">Login</a>
-            <a href="/register" class="p-2 mr-2">Register</a>
+            <a href="/register" hx-get="/register" hx-target="body" class="p-2 mr-2">Create account</a>
         </div>
     </nav>
 
