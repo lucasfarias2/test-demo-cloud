@@ -11,10 +11,8 @@ import (
 )
 
 type PageData struct {
-	Name       string
-	PageTitle  string
-	CurrentUrl string
-	IsDev      bool
+	PageTitle string
+	IsDev     bool
 }
 
 var templateFiles = []string{
@@ -44,9 +42,8 @@ func main() {
 		}
 
 		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
-			PageTitle:  "Packlify",
-			CurrentUrl: r.URL.Path,
-			IsDev:      os.Getenv("APP_ENV") != "production",
+			PageTitle: "Packlify",
+			IsDev:     os.Getenv("APP_ENV") != "production",
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -60,9 +57,8 @@ func main() {
 		}
 
 		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
-			PageTitle:  "Login - Packlify",
-			CurrentUrl: r.URL.Path,
-			IsDev:      os.Getenv("APP_ENV") != "production",
+			PageTitle: "Login - Packlify",
+			IsDev:     os.Getenv("APP_ENV") != "production",
 		})
 		if err != nil {
 			log.Println("Error:", err)
