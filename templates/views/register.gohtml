@@ -11,18 +11,36 @@
         <h1 class="text-3xl brand">Create a new account</h1>
         <p>Please register with your email account.</p>
         <form class="py-6 mb-4 flex items-center justify-center flex-col border-b">
-            <input type="text" placeholder="Email" class="shadow rounded-lg p-2 w-full mb-2 text-sm"
+            <input type="text" placeholder="Email" class="rounded-lg px-2 py-3 w-full mb-2 text-sm border"
                    required/>
-            <input type="password" placeholder="Password" class="shadow rounded-lg p-2 w-full text-sm mb-4"
+            <input type="password" placeholder="Password" class="rounded-lg px-2 py-3 w-full mb-4 text-sm border"
                    required/>
-            <button class="rounded-lg bg-gray-800 w-full text-white p-2 px-4 text-sm font-medium">Sign up with Email</button>
+            <button class="rounded-lg bg-gray-800 w-full text-white p-2 px-4 text-sm font-medium flex items-center justify-center">
+                <div class="w-4 h-4 mr-2">
+                    {{ template "emailIcon" }}
+                </div>
+
+                Sign in with Email
+            </button>
         </form>
         <p class="mb-4">Or use one of the following providers:</p>
-        <button class="rounded-lg w-full bg-white p-2 px-4 text-sm shadow-sm font-medium mb-2">Sign up with GitHub
+        <button class="rounded-lg w-full bg-white p-2 px-4 text-sm border font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "githubIcon" }}
+            </div>
+            Sign up with GitHub
         </button>
-        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm shadow-sm  font-medium mb-2">Sign up with Google
+        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "googleIcon" }}
+            </div>
+            Sign up with Google
         </button>
-        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm  shadow-sm font-medium mb-2">Sign up with Apple
+        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "appleIcon" }}
+            </div>
+            Sign up with Apple
         </button>
     </div>
 </main>
