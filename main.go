@@ -15,14 +15,6 @@ type PageData struct {
 	IsDev     bool
 }
 
-var templateFiles = []string{
-	"./templates/views/index.gohtml",
-	"./templates/views/login.gohtml",
-	"./templates/views/register.gohtml",
-	"./templates/components/head.gohtml",
-	"./templates/components/navbar.gohtml",
-}
-
 func main() {
 	if err := utils.LoadEnv(".env"); err != nil {
 		panic(err)
@@ -34,12 +26,12 @@ func main() {
 	var tmpl *template.Template
 
 	if os.Getenv("APP_ENV") == "production" {
-		tmpl = template.Must(template.ParseFiles(templateFiles...))
+		tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("APP_ENV") != "production" {
-			tmpl = template.Must(template.ParseFiles(templateFiles...))
+			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
@@ -54,7 +46,7 @@ func main() {
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("APP_ENV") != "production" {
-			tmpl = template.Must(template.ParseFiles(templateFiles...))
+			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
@@ -69,7 +61,7 @@ func main() {
 
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("APP_ENV") != "production" {
-			tmpl = template.Must(template.ParseFiles(templateFiles...))
+			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "register.gohtml", PageData{

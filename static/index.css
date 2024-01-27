@@ -10,3 +10,7 @@ body {
 .brand {
     font-family: 'Gabarito', sans-serif;
 }
+
+.icon-white svg {
+    fill: #fff;
+}
