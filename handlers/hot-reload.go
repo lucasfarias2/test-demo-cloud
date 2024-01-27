@@ -55,7 +55,7 @@ func HandleHotReloadWS(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return err
 		}
-		if filepath.Ext(path) == ".html" {
+		if filepath.Ext(path) == ".gohtml" {
 			return watcher.Add(path)
 		}
 		return nil
