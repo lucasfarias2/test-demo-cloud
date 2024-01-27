@@ -11,37 +11,37 @@
         <h1 class="text-3xl brand">Sign in</h1>
         <p>Please log in with your existent account.</p>
         <form class="py-6 mb-4 flex items-center justify-center flex-col border-b">
-            <input type="text" placeholder="Email" class="shadow-sm rounded-lg px-2 py-3 w-full mb-2 text-sm border"
+            <input type="text" placeholder="Email" class="rounded-lg px-2 py-3 w-full mb-2 text-sm border"
                    required/>
             <input type="password" placeholder="Password"
-                   class="shadow-sm rounded-lg px-2 py-3 w-full text-sm mb-4 border"
+                   class="rounded-lg px-2 py-3 w-full text-sm mb-4 border"
                    required/>
             <button class="rounded-lg bg-gray-800 w-full text-white p-2 px-4 text-sm font-medium flex items-center justify-center">
-                <div class="w-4 h-4 mr-2 stroke-white fill-none">
-                    {{ template "emailIcon" . }}
+                <div class="w-4 h-4 mr-2">
+                    {{ template "emailIcon" }}
                 </div>
 
                 Sign in with Email
             </button>
         </form>
         <p class="mb-4">Or use one of the following providers:</p>
-        <button class="rounded-lg w-full bg-white p-2 px-4 text-sm shadow-sm font-medium mb-2 flex items-center justify-center">
-            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 fill-gray-800">
-                {{ template "githubIcon" . }}
-            </svg>
+        <button class="rounded-lg w-full bg-white p-2 px-4 text-sm border font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "githubIcon" }}
+            </div>
             Sign in with GitHub
         </button>
-        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm shadow-sm font-medium mb-2 flex items-center justify-center">
-            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" class="w-4 h-4 mr-2">
-                {{ template "googleIcon" . }}
-            </svg>
+        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "googleIcon" }}
+            </div>
             Sign in
             with Google
         </button>
-        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm shadow-sm font-medium mb-2 flex items-center justify-center">
-            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" class="w-4 h-4 mr-2">
-                {{ template "appleIcon" . }}
-            </svg>
+        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+            <div class="w-4 h-4 mr-2">
+                {{ template "appleIcon" }}
+            </div>
             Sign in with
             Apple
         </button>
