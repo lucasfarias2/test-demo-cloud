@@ -23,9 +23,6 @@ WORKDIR /go/src/app
 # Copy the Go application source code to the container
 COPY . .
 
-# Copy the built UI from the uibuilder stage
-COPY --from=uibuilder /app/static/dist ./static/dist
-
 # Build the Go application
 RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o cloud .
 
@@ -39,6 +36,12 @@ COPY --from=gobuilder /go/src/app/cloud .
 
 # Copy the templates directory
 COPY --from=gobuilder /go/src/app/templates ./templates
+
+# Copy the static directory
+COPY --from=gobuilder /go/src/app/static ./static
+
+# Copy the built UI from the uibuilder stage
+COPY --from=uibuilder /app/static/dist ./static/dist
 
 # Expose the port your app runs on
 EXPOSE 8080
