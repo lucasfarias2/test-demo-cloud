@@ -24,7 +24,7 @@ WORKDIR /go/src/app
 COPY . .
 
 # Copy the built UI from the uibuilder stage
-COPY --from=uibuilder /app/ui/static/dist ./ui/static/dist
+COPY --from=uibuilder /app/static/dist ./static/dist
 
 # Build the Go application
 RUN go build -o main .
