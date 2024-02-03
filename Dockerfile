@@ -27,7 +27,7 @@ COPY . .
 COPY --from=uibuilder /app/static/dist ./static/dist
 
 # Build the Go application
-RUN go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o main .
 
 # Final stage: Use a small base image
 FROM alpine:latest
@@ -41,4 +41,4 @@ COPY --from=gobuilder /go/src/app/main .
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["./main"]
+ENTRYPOINT ["/cloud"]
