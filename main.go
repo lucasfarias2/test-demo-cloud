@@ -16,9 +16,7 @@ type PageData struct {
 }
 
 func main() {
-	if err := utils.LoadEnv(".env"); err != nil {
-		panic(err)
-	}
+	_ = utils.LoadEnv(".env")
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
