@@ -12,29 +12,31 @@ import (
 
 type PageData struct {
 	PageTitle string
-	IsDev     bool
+	IsProd    bool
 }
 
 func main() {
 	_ = utils.LoadEnv(".env")
+
+	var isProd = os.Getenv("APP_ENV") == "production"
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	var tmpl *template.Template
 
-	if os.Getenv("APP_ENV") == "production" {
+	if isProd {
 		tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if os.Getenv("APP_ENV") != "production" {
+		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
 			PageTitle: "Packlify",
-			IsDev:     os.Getenv("APP_ENV") != "production",
+			IsProd:    isProd,
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -43,13 +45,13 @@ func main() {
 	})
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		if os.Getenv("APP_ENV") != "production" {
+		if isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
 			PageTitle: "Login - Packlify",
-			IsDev:     os.Getenv("APP_ENV") != "production",
+			IsProd:    isProd,
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -58,13 +60,13 @@ func main() {
 	})
 
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		if os.Getenv("APP_ENV") != "production" {
+		if isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "register.gohtml", PageData{
 			PageTitle: "New account - Packlify",
-			IsDev:     os.Getenv("APP_ENV") != "production",
+			IsProd:    isProd,
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -72,7 +74,7 @@ func main() {
 		}
 	})
 
-	if os.Getenv("APP_ENV") != "production" {
+	if !isProd {
 		http.HandleFunc("/ws", handlers.HandleHotReloadWS)
 	}
 

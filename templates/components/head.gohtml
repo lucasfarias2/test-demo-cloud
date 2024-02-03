@@ -8,7 +8,7 @@
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
         <script src="/static/htmx.min.js"></script>
 
-        {{if .IsDev}}
+        {{if not .IsProd}}
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             function connectDevServer() {
