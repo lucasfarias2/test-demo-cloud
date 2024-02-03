@@ -35,7 +35,7 @@ FROM alpine:latest
 WORKDIR /root/
 
 # Copy the Go executable from the gobuilder stage
-COPY --from=gobuilder /go/src/app/main .
+COPY --from=gobuilder /go/src/app/cloud .
 
 # Expose the port your app runs on
 EXPOSE 8080
