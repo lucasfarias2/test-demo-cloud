@@ -46,5 +46,7 @@ COPY --from=uibuilder /app/static/dist ./static/dist
 # Expose the port your app runs on
 EXPOSE 8080
 
+ENV APP_ENV=production
+
 # Command to run the executable
 ENTRYPOINT ["/root/cloud"]
