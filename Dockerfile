@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Copy the UI directory to the container
 COPY ui ./ui
+COPY templates ./templates
 
 # Install npm dependencies and build the UI
 RUN cd ui && npm install && npm run build
