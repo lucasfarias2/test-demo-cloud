@@ -37,6 +37,9 @@ WORKDIR /root/
 # Copy the Go executable from the gobuilder stage
 COPY --from=gobuilder /go/src/app/cloud .
 
+# Copy the templates directory
+COPY --from=gobuilder /go/src/app/templates ./templates
+
 # Expose the port your app runs on
 EXPOSE 8080
 
