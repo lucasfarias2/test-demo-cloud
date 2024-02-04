@@ -84,7 +84,7 @@ func main() {
 			log.Println("Error:", err)
 			return
 		}
-	}), authClient))
+	}), authClient, true))
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if !isProd {
