@@ -3,6 +3,8 @@ package main
 import (
 	"cloud/handlers"
 	"cloud/utils"
+	"context"
+	firebase "firebase.google.com/go"
 	"fmt"
 	"html/template"
 	"log"
@@ -11,14 +13,30 @@ import (
 )
 
 type PageData struct {
-	PageTitle string
-	IsProd    bool
+	PageTitle       string
+	PageDescription string
+	IsProd          bool
+	FirebaseAPIKey  string
 }
 
 func main() {
 	_ = utils.LoadEnv(".env")
 
 	var isProd = os.Getenv("APP_ENV") == "production"
+
+	config := &firebase.Config{ProjectID: "packlify"}
+
+	app, err := firebase.NewApp(context.Background(), config, option.WithCredentialsJSON([]byte(os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"))))
+	if err != nil {
+		log.Fatalf("error initializing app: %v\n", err)
+	}
+
+	ctx := context.Background()
+
+	authClient, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("error getting Auth client: %v\n", err)
+	}
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
@@ -35,8 +53,9 @@ func main() {
 		}
 
 		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
-			PageTitle: "Packlify",
-			IsProd:    isProd,
+			PageTitle:       "Packlify",
+			PageDescription: "Packlify is a cloud manager platform that allows you to automatically deploy your applications into your desired cloud provider.",
+			IsProd:          isProd,
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -45,13 +64,15 @@ func main() {
 	})
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		if isProd {
+		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
-			PageTitle: "Login - Packlify",
-			IsProd:    isProd,
+			PageTitle:       "Login - Packlify",
+			PageDescription: "Login to your account to access your Packlify dashboard.",
+			IsProd:          isProd,
+			FirebaseAPIKey:  os.Getenv("FIREBASE_API_KEY"),
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -60,19 +81,23 @@ func main() {
 	})
 
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		if isProd {
+		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
 		err := tmpl.ExecuteTemplate(w, "register.gohtml", PageData{
-			PageTitle: "New account - Packlify",
-			IsProd:    isProd,
+			PageTitle:       "New account - Packlify",
+			PageDescription: "Create your account to access your Packlify dashboard.",
+			IsProd:          isProd,
+			FirebaseAPIKey:  os.Getenv("FIREBASE_API_KEY"),
 		})
 		if err != nil {
 			log.Println("Error:", err)
 			return
 		}
 	})
+
+	http.HandleFunc("/api/v1/login", api.HandleLogin)
 
 	if !isProd {
 		http.HandleFunc("/ws", handlers.HandleHotReloadWS)

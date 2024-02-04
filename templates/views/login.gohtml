@@ -6,6 +6,57 @@
 
 {{ template "navbar" . }}
 
+<script type="module">
+    import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js'
+
+    console.log("apikey", {{ .FirebaseAPIKey}})
+
+    const firebaseConfig = {
+        apiKey: {{ .FirebaseAPIKey }},
+        authDomain: "packlify-a8deb.firebaseapp.com",
+        projectId: "packlify",
+        storageBucket: "packlify.appspot.com",
+        messagingSenderId: "822557664620",
+        appId: "1:822557664620:web:3e8540639da59ab30fff49"
+    };
+
+    const app = initializeApp(firebaseConfig);
+</script>
+
+<script type="module">
+    import {
+        getAuth,
+        signInWithPopup,
+        GithubAuthProvider
+    } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js'
+
+    const provider = new GithubAuthProvider();
+
+    function handleOnClickGithubSignIn() {
+        const auth = getAuth();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+                const credential = GithubAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+
+
+                console.log("token", token)
+                console.log("user", user)
+                // ...
+            }).catch((error) => {
+                console.log("Error signing in with Github", error);
+                const credential = GithubAuthProvider.credentialFromError(error);
+                console.log("Credential", credential);
+            }
+        );
+    }
+
+    const githubBtn = document.getElementById('github-btn');
+    githubBtn.addEventListener('click', handleOnClickGithubSignIn);
+</script>
+
 <main class="py-8">
     <div class="mx-auto w-full text-center max-w-sm">
         <h1 class="text-3xl brand">Sign in</h1>
@@ -25,7 +76,8 @@
             </button>
         </form>
         <p class="mb-4">Or use one of the following providers:</p>
-        <button class="rounded-lg w-full bg-white p-2 px-4 text-sm border font-medium mb-2 flex items-center justify-center">
+        <button id="github-btn"
+                class="rounded-lg w-full bg-white p-2 px-4 text-sm border font-medium mb-2 flex items-center justify-center">
             <div class="w-4 h-4 mr-2">
                 {{ template "githubIcon" }}
             </div>
