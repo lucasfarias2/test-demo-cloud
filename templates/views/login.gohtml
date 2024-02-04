@@ -33,7 +33,9 @@
 
     const provider = new GithubAuthProvider();
 
-    function handleSignInWithEmail() {
+    function handleSignInWithEmail(e) {
+        e.preventDefault();
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 

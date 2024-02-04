@@ -3,6 +3,7 @@ package main
 import (
 	"cloud/handlers"
 	"cloud/handlers/api"
+	"cloud/middleware"
 	"cloud/utils"
 	"context"
 	firebase "firebase.google.com/go"
@@ -19,14 +20,7 @@ type PageData struct {
 	PageDescription string
 	IsProd          bool
 	FirebaseAPIKey  string
-	User            User
-}
-
-type User struct {
-	UID      string `json:"uid"`
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
+	User            middleware.User
 }
 
 func main() {
@@ -73,22 +67,24 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/dashboard", func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/dashboard", middleware.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
+		user := r.Context().Value("user").(middleware.User)
+
 		err := tmpl.ExecuteTemplate(w, "dashboard.gohtml", PageData{
 			PageTitle:       "Dashboard - Packlify",
-			PageDescription: "Packlify is a cloud manager platform that allows you to automatically deploy your applications into your desired cloud provider.",
+			PageDescription: "Your Packlify dashboard.",
 			IsProd:          isProd,
-			User:            User{},
+			User:            user,
 		})
 		if err != nil {
 			log.Println("Error:", err)
 			return
 		}
-	})
+	}), authClient))
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if !isProd {
