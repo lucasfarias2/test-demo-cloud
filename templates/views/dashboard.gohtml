@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{ template "head". }}
+
+<body>
+
+{{ template "navbar". }}
+
+<main>
+    <h1>Dashboard</h1>
+    You are logged in!! {{ .User.Email }}
+</main>
+
+<footer class="py-8 text-center text-xs text-gray-500">
+    © Packlify.com - Developed by Lucas Farias.
+</footer>
+
+</body>
+
+</html>

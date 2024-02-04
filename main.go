@@ -2,10 +2,12 @@ package main
 
 import (
 	"cloud/handlers"
+	"cloud/handlers/api"
 	"cloud/utils"
 	"context"
 	firebase "firebase.google.com/go"
 	"fmt"
+	"google.golang.org/api/option"
 	"html/template"
 	"log"
 	"net/http"
@@ -17,6 +19,14 @@ type PageData struct {
 	PageDescription string
 	IsProd          bool
 	FirebaseAPIKey  string
+	User            User
+}
+
+type User struct {
+	UID      string `json:"uid"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
 }
 
 func main() {
@@ -63,6 +73,23 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/dashboard", func(w http.ResponseWriter, r *http.Request) {
+		if !isProd {
+			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
+		}
+
+		err := tmpl.ExecuteTemplate(w, "dashboard.gohtml", PageData{
+			PageTitle:       "Dashboard - Packlify",
+			PageDescription: "Packlify is a cloud manager platform that allows you to automatically deploy your applications into your desired cloud provider.",
+			IsProd:          isProd,
+			User:            User{},
+		})
+		if err != nil {
+			log.Println("Error:", err)
+			return
+		}
+	})
+
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
@@ -97,7 +124,7 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/api/v1/login", api.HandleLogin)
+	http.HandleFunc("/api/v1/login", api.HandleLogin(authClient))
 
 	if !isProd {
 		http.HandleFunc("/ws", handlers.HandleHotReloadWS)
@@ -105,7 +132,7 @@ func main() {
 
 	fmt.Println("Server running on port 8080")
 
-	err := http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatalln("Error starting the server")
 		return

@@ -27,10 +27,39 @@
     import {
         getAuth,
         signInWithPopup,
-        GithubAuthProvider
+        GithubAuthProvider,
+        signInWithEmailAndPassword
     } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js'
 
     const provider = new GithubAuthProvider();
+
+    function handleSignInWithEmail() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+            return;
+        }
+
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log("user", user)
+
+                user.getIdToken().then((idToken) => {
+                    document.getElementById('token').value = idToken;
+                    htmx.trigger('#signInForm', 'submit');
+                }).catch((error) => {
+                    console.log("Error getting idToken", error);
+                });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log("Error", errorCode, errorMessage)
+            });
+    }
 
     function handleOnClickGithubSignIn() {
         const auth = getAuth();
@@ -38,13 +67,19 @@
             .then((result) => {
                 // This gives you a GitHub Access Token. You can use it to access the GitHub API.
                 const credential = GithubAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
                 const user = result.user;
-
+                const token = credential.accessToken;
 
                 console.log("token", token)
                 console.log("user", user)
-                // ...
+
+                user.getIdToken().then((idToken) => {
+                    document.getElementById('token').value = idToken;
+                    htmx.trigger('#signInForm', 'submit');
+                }).catch((error) => {
+                    console.log("Error getting idToken", error);
+                });
+
             }).catch((error) => {
                 console.log("Error signing in with Github", error);
                 const credential = GithubAuthProvider.credentialFromError(error);
@@ -55,24 +90,32 @@
 
     const githubBtn = document.getElementById('github-btn');
     githubBtn.addEventListener('click', handleOnClickGithubSignIn);
+
+    const emailBtn = document.getElementById('email-btn');
+    emailBtn.addEventListener('click', handleSignInWithEmail);
 </script>
 
 <main class="py-8">
     <div class="mx-auto w-full text-center max-w-sm">
         <h1 class="text-3xl brand">Sign in</h1>
         <p>Please log in with your existent account.</p>
-        <form class="py-6 mb-4 flex items-center justify-center flex-col border-b">
-            <input type="text" placeholder="Email" class="rounded-lg px-2 py-3 w-full mb-2 text-sm border"
-                   required/>
-            <input type="password" placeholder="Password"
+        <form id="signInForm" class="py-6 mb-4 flex items-center justify-center flex-col border-b"
+              hx-post="/api/v1/login" hx-redirect="/dashboard">
+            <input id="email" type="text" name="email" placeholder="Email"
+                   class="rounded-lg px-2 py-3 w-full mb-2 text-sm border"
+            />
+            <input id="password" name="password" type="password" placeholder="Password"
                    class="rounded-lg px-2 py-3 w-full text-sm mb-4 border"
-                   required/>
-            <button class="rounded-lg bg-gray-800 w-full text-white p-2 px-4 text-sm font-medium flex items-center justify-center">
+            />
+            <input type="hidden" id="token" name="token" value="">
+            <button id="email-btn"
+                    class="rounded-lg bg-gray-800 w-full text-white p-2 px-4 text-sm font-medium flex items-center justify-center"
+                    type="submit">
                 <div class="w-4 h-4 mr-2">
                     {{ template "emailIcon" }}
                 </div>
 
-                Sign in with Email
+                Submit using email
             </button>
         </form>
         <p class="mb-4">Or use one of the following providers:</p>
@@ -83,14 +126,14 @@
             </div>
             Sign in with GitHub
         </button>
-        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+        <button class="rounded-lg bg-rose-500 w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center pointer-events-none opacity-20">
             <div class="w-4 h-4 mr-2">
                 {{ template "googleIcon" }}
             </div>
             Sign in
             with Google
         </button>
-        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center">
+        <button class="rounded-lg bg-black w-full text-white p-2 px-4 text-sm font-medium mb-2 flex items-center justify-center pointer-events-none opacity-20">
             <div class="w-4 h-4 mr-2">
                 {{ template "appleIcon" }}
             </div>

@@ -1,21 +1,68 @@
 package api
 
-import "net/http"
+import (
+	"context"
+	"encoding/json"
+	"firebase.google.com/go/auth"
+	"log"
+	"net/http"
+	"time"
+)
 
-func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	// read login token from request body
-	tokenFromBody := r.Body.token
+type loginRequestData struct {
+	Token string `json:"token"`
+}
 
-	// verify token with firebase
+type loginResponseData struct {
+	SessionToken string `json:"sessionToken"`
+}
 
-	// if token is valid, return a JWT
-	// if token is invalid, return an error
-	// if token is missing, return an error
-	// if token is expired, return an error
-	// if token is revoked, return an error
-	// if token is disabled, return an error
-	// if token is not found, return an error
-	// if token is not verified, return an error
-	// for rest return generic error
-	// return the JWT as JSON and include cookie (session=JWT) in the response
+func HandleLogin(authClient *auth.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.Background()
+
+		if r.Method != "POST" {
+			http.Error(w, "Only POST method is accepted", http.StatusMethodNotAllowed)
+			return
+		}
+
+		var body loginRequestData
+
+		body.Token = r.FormValue("token")
+
+		expiresIn := time.Hour * 24 * 14
+
+		sessionToken, err := authClient.SessionCookie(ctx, body.Token, expiresIn)
+		if err != nil {
+			log.Printf("Failed to create a session cookie: %v", err)
+			http.Error(w, "Failed to create a session cookie", http.StatusInternalServerError)
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session",
+			Value:    sessionToken,
+			Path:     "/",
+			Expires:  time.Now().Add(expiresIn),
+			HttpOnly: true,
+			Secure:   true,
+		})
+
+		// Prepare the response data with the session token
+		responseData := loginResponseData{
+			SessionToken: sessionToken,
+		}
+
+		// Set response header to application/json
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("HX-Redirect", "/dashboard")
+
+		// Encode and write the response data as JSON
+		if err := json.NewEncoder(w).Encode(responseData); err != nil {
+			log.Printf("Failed to encode response data: %v", err)
+			http.Error(w, "Failed to process request", http.StatusInternalServerError)
+			return
+		}
+	}
+
 }
