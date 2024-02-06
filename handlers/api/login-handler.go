@@ -22,7 +22,7 @@ func HandleLogin(authClient *auth.Client) http.HandlerFunc {
 		ctx := context.Background()
 
 		if r.Method != "POST" {
-			http.Error(w, "Only POST method is accepted", http.StatusMethodNotAllowed)
+			http.Error(w, "HTTP Method not accepted", http.StatusMethodNotAllowed)
 			return
 		}
 

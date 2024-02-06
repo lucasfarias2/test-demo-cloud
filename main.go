@@ -51,23 +51,36 @@ func main() {
 		tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/", middleware.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
+			return
+		}
+
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
+
+		user := r.Context().Value("user").(middleware.User)
 
 		err := tmpl.ExecuteTemplate(w, "index.gohtml", PageData{
 			PageTitle:       "Packlify",
 			PageDescription: "Packlify is a cloud manager platform that allows you to automatically deploy your applications into your desired cloud provider.",
 			IsProd:          isProd,
+			User:            user,
 		})
 		if err != nil {
 			log.Println("Error:", err)
 			return
 		}
-	})
+	}), authClient, false))
 
 	http.Handle("/dashboard", middleware.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
+			return
+		}
+
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
@@ -87,11 +100,22 @@ func main() {
 	}), authClient, true))
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
+			return
+		}
+
+		cookie, err := r.Cookie("session")
+		if cookie != nil {
+			http.Redirect(w, r, "/dashboard", http.StatusFound)
+			return
+		}
+
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
-		err := tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
+		err = tmpl.ExecuteTemplate(w, "login.gohtml", PageData{
 			PageTitle:       "Login - Packlify",
 			PageDescription: "Login to your account to access your Packlify dashboard.",
 			IsProd:          isProd,
@@ -104,11 +128,22 @@ func main() {
 	})
 
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
+			return
+		}
+
+		cookie, err := r.Cookie("session")
+		if cookie != nil {
+			http.Redirect(w, r, "/dashboard", http.StatusFound)
+			return
+		}
+
 		if !isProd {
 			tmpl = template.Must(template.ParseGlob("./templates/**/*.gohtml"))
 		}
 
-		err := tmpl.ExecuteTemplate(w, "register.gohtml", PageData{
+		err = tmpl.ExecuteTemplate(w, "register.gohtml", PageData{
 			PageTitle:       "New account - Packlify",
 			PageDescription: "Create your account to access your Packlify dashboard.",
 			IsProd:          isProd,

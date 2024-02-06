@@ -18,13 +18,14 @@ func AuthMiddleware(next http.Handler, authClient *auth.Client, forceAuth bool) 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session")
 		if err != nil {
-			next.ServeHTTP(w, r)
-			return
-		}
-
-		if forceAuth && cookie == nil {
-			http.Redirect(w, r, "/login", http.StatusFound)
-			return
+			if forceAuth {
+				http.Redirect(w, r, "/login", http.StatusFound)
+				return
+			} else {
+				ctx := context.WithValue(r.Context(), "user", User{})
+				next.ServeHTTP(w, r.WithContext(ctx))
+				return
+			}
 		}
 
 		token, err := authClient.VerifySessionCookieAndCheckRevoked(r.Context(), cookie.Value)

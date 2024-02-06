@@ -18,6 +18,11 @@ var upgrader = websocket.Upgrader{
 }
 
 func HandleHotReloadWS(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
+		return
+	}
+
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
