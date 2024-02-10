@@ -6,6 +6,7 @@ import (
 	"os"
 	"packlify-cloud/handlers"
 	"packlify-cloud/middleware"
+	"packlify-cloud/services"
 	"packlify-cloud/utils"
 )
 
@@ -15,9 +16,32 @@ func OrganizationHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
+		organizations, _ := services.GetUserOrganizations(user.UID)
+
 		err := templates.ExecuteTemplate(w, "organization.gohtml", handlers.PageData{
 			PageTitle:       "Your organization - Packlify",
-			PageDescription: "Your organization in Packlify",
+			PageDescription: "Your organizations in Packlify",
+			IsProd:          os.Getenv("APP_ENV") == "production",
+			User:            user,
+			Organizations:   organizations,
+		})
+		if err != nil {
+			log.Println("Error:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func NewOrgHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user, _ := r.Context().Value("user").(*middleware.User)
+
+		templates := utils.LoadTemplates()
+
+		err := templates.ExecuteTemplate(w, "new-org.gohtml", handlers.PageData{
+			PageTitle:       "Create new organization - Packlify",
+			PageDescription: "Your new organization in Packlify",
 			IsProd:          os.Getenv("APP_ENV") == "production",
 			User:            user,
 		})

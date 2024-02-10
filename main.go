@@ -20,9 +20,9 @@ import (
 func main() {
 	router := chi.NewRouter()
 
-	db.ConnectDatabase()
-
 	_ = utils.LoadEnv(".env")
+
+	db.ConnectDatabase()
 
 	isProd := os.Getenv("APP_ENV") == "production"
 
@@ -54,11 +54,13 @@ func main() {
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects", dashboard.ProjectsHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org", dashboard.OrganizationHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org/new", dashboard.NewOrgHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/signup", handlers.SignupHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/logout", handlers.LogoutHandler())
 
 	router.Post("/api/v1/login", api.LoginApiHandler(authClient))
+	router.Post("/api/v1/organization", api.CreateOrganizationApiHandler)
 
 	fmt.Println("Server running on port 8080")
 

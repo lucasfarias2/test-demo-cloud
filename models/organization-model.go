@@ -1,6 +1,7 @@
 package models
 
-type Organization struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+type Org struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	AdminUserID string `json:"admin_user_id"`
 }

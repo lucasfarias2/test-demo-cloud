@@ -16,7 +16,7 @@ create table projects
 );
 
 insert into organizations(name, admin_user_id)
-values ('The Database Organization', 'db@test.com');
+values ('The Database Organization', '0000');
 
 insert into projects(name, organization_id)
 values ('The Database Project', 1);

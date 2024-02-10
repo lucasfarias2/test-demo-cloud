@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{ template "head". }}
+
+<body>
+
+{{ template "navbar-logged-in". }}
+
+<main class="md:px-32 px-4 py-8">
+    <h1 class="font-medium text-2xl">New organization</h1>
+    <div class="text-sm text-gray-500 mb-8">Fill in the following details to create a new organization.</div>
+
+    <div class="flex max-w-3xl">
+        <form id="newOrgForm" class="flex-col w-full text-right"
+              hx-post="/api/v1/organization">
+            <div class="flex">
+                <label for="name" class="text-left text-sm w-full">Name
+                    <div class="text-xs text-gray-500">You won't be able to change it later.</div>
+                </label>
+                <input id="name" type="text" name="name" placeholder="Name of your organization"
+                       class="rounded-lg px-3 py-3 w-full mb-2 text-sm border"
+                />
+            </div>
+
+            <div class="flex">
+                <label for="admin_user_id" class="text-left text-sm w-full">Admin User
+                    <div class="text-xs text-gray-500">By default is the creator. You will be able to change it later.
+                    </div>
+                </label>
+                <input type="text" disabled value="{{.User.UID}}"
+                       class="rounded-lg px-3 py-3 w-full mb-4 text-sm border"
+                />
+            </div>
+
+            <button id="email-btn"
+                    class="rounded-lg bg-gray-800 text-white p-2 px-4 text-sm font-medium"
+                    type="submit">
+                Submit
+            </button>
+        </form>
+    </div>
+</main>
+
+<footer class="py-8 text-center text-xs text-gray-500">
+    © Packlify.com - Developed by Lucas Farias.
+</footer>
+
+</body>
+
+</html>

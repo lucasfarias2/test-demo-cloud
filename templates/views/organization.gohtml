@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{ template "head". }}
+
+<body>
+
+{{ template "navbar-logged-in". }}
+
+<main class="px-32 py-8">
+    <h1 class="font-medium text-2xl">Your organization</h1>
+    <div class="text-sm text-gray-500 mb-4">This is a summary of your organization.</div>
+
+    <div class="bg-white rounded-lg shadow p-8 text-center">
+        {{ if .Organizations }}
+            <div class="grid grid-cols-4 gap-4">
+                {{ range .Organizations }}
+                    <div class="border rounded-lg p-4 bg-gray-50 shadow-sm">
+                        <h3 class="text-lg font-medium">{{ .Name }}</h3>
+                        <div class="text-sm text-gray-500">User admin: {{ .AdminUserID }}</div>
+                    </div>
+                {{ end }}
+                <div class="border rounded-lg p-4 bg-gray-50 shadow-sm flex items-center justify-center">
+                    <a href="/dashboard/org/new" hx-get="/dashboard/org/new" hx-target="body" hx-push-url="true">
+                        <button class="rounded-full bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
+                            organization
+                        </button>
+                    </a>
+                </div>
+            </div>
+        {{ else }}
+            <h2 class="mb-4 text-lg text-gray-400">You don't have an organization yet.</h2>
+            <a href="/dashboard/org/new" hx-get="/dashboard/org/new" hx-target="body" hx-push-url="true">
+                <button class="rounded-full bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
+                    organization
+                </button>
+            </a>
+        {{ end }}
+</main>
+
+<footer class="py-8 text-center text-xs text-gray-500">
+    © Packlify.com - Developed by Lucas Farias.
+</footer>
+
+</body>
+
+</html>

@@ -1,6 +1,9 @@
 package handlers
 
-import "packlify-cloud/middleware"
+import (
+	"packlify-cloud/middleware"
+	"packlify-cloud/models"
+)
 
 type PageData struct {
 	PageTitle       string
@@ -8,4 +11,5 @@ type PageData struct {
 	IsProd          bool
 	User            *middleware.User
 	FirebaseAPIKey  string
+	Organizations   []models.Org
 }

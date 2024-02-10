@@ -7,6 +7,7 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/gorilla/websocket v1.5.1
+	github.com/lib/pq v1.10.9
 	google.golang.org/api v0.161.0
 )
 
