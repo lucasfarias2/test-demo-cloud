@@ -17,14 +17,9 @@ type loginResponseData struct {
 	SessionToken string `json:"sessionToken"`
 }
 
-func HandleLogin(authClient *auth.Client) http.HandlerFunc {
+func LoginApiHandler(authClient *auth.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.Background()
-
-		if r.Method != "POST" {
-			http.Error(w, "HTTP Method not accepted", http.StatusMethodNotAllowed)
-			return
-		}
 
 		var body loginRequestData
 
@@ -48,16 +43,13 @@ func HandleLogin(authClient *auth.Client) http.HandlerFunc {
 			Secure:   true,
 		})
 
-		// Prepare the response data with the session token
 		responseData := loginResponseData{
 			SessionToken: sessionToken,
 		}
 
-		// Set response header to application/json
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("HX-Redirect", "/dashboard")
 
-		// Encode and write the response data as JSON
 		if err := json.NewEncoder(w).Encode(responseData); err != nil {
 			log.Printf("Failed to encode response data: %v", err)
 			http.Error(w, "Failed to process request", http.StatusInternalServerError)

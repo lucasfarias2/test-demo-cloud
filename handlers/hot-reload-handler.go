@@ -17,7 +17,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func HandleHotReloadWS(w http.ResponseWriter, r *http.Request) {
+func HotReloadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
 		return

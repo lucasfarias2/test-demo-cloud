@@ -8,12 +8,11 @@
             {{ if .User }}
                 <a href="/dashboard" hx-get="/dashboard" hx-target="body" hx-push-url="true"
                    class="p-2 mr-2 md:text-base text-xs">Dashboard</a>
-                <a href="/logout" hx-post="/logout" hx-target="body" hx-push-url="true"
-                   class="p-2 mr-2 md:text-base text-xs">Logout</a>
+                <a href="/logout" class="p-2 mr-2 md:text-base text-xs">Logout</a>
             {{ else }}
                 <a href="/login" hx-get="/login" hx-target="body" class="p-2 mr-2 md:text-base text-xs"
                    hx-push-url="true">Sign in</a>
-                <a href="/register" hx-get="/register" hx-target="body" class="p-2 mr-2 md:text-base text-xs"
+                <a href="/signup" hx-get="/signup" hx-target="body" class="p-2 mr-2 md:text-base text-xs"
                    hx-push-url="true">Create
                     account</a>
             {{ end }}
