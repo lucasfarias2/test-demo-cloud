@@ -7,9 +7,18 @@
 
 {{ template "navbar". }}
 
-<main class="p-8">
-    <h1>Dashboard</h1>
-    You are logged in!! {{ .User.Email }}
+<nav class="h-10 bg-gray-100 flex items-center px-32 bg-gray-700">
+    <a href="/dashboard/gcp" class="h-full bg-gray-600 flex items-center justify-center px-4 text-white text-sm">
+        Google Cloud
+    </a>
+    <a href="/dashboard/packlify" class="h-full bg-gray-600 flex items-center justify-center px-4 text-white text-sm">
+        Packlify Cloud
+    </a>
+</nav>
+
+<main class="px-32 py-8">
+    <h1 class="font-medium text-2xl">Dashboard</h1>
+    <div class="text-sm text-gray-500">This is a summary of your account.</div>
 </main>
 
 <footer class="py-8 text-center text-xs text-gray-500">

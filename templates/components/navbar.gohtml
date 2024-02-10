@@ -6,6 +6,9 @@
         </div>
         <div class="flex items-center justify-center">
             {{ if .User }}
+                <div class="mr-4 text-sm py-1 px-3 rounded-full bg-gray-100 text-gray-500">
+                    {{ .User.Email }}
+                </div>
                 <a href="/dashboard" hx-get="/dashboard" hx-target="body" hx-push-url="true"
                    class="p-2 mr-2 md:text-base text-xs">Dashboard</a>
                 <a href="/logout" class="p-2 mr-2 md:text-base text-xs">Logout</a>
