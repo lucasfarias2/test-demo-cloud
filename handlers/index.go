@@ -1,6 +1,6 @@
 package handlers
 
-import "cloud/middleware"
+import "packlify-cloud/middleware"
 
 type PageData struct {
 	PageTitle       string

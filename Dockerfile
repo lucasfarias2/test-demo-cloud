@@ -25,7 +25,7 @@ WORKDIR /go/src/app
 COPY . .
 
 # Build the Go application
-RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o cloud .
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o packlify-cloud .
 
 # Final stage: Use a small base image
 FROM alpine:latest

@@ -1,4 +1,4 @@
-module cloud
+module packlify-cloud
 
 go 1.21.1
 

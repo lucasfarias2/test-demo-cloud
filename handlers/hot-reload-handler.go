@@ -10,26 +10,18 @@ import (
 )
 
 var upgrader = websocket.Upgrader{
-	// Set up the upgrader with necessary parameters
-	// For instance, you can check the origin of the request like this:
 	CheckOrigin: func(r *http.Request) bool {
 		return true // Allow all origins
 	},
 }
 
 func HotReloadHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "HTTP method not accepted", http.StatusMethodNotAllowed)
-		return
-	}
-
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 	}
 	defer ws.Close()
 
-	// Watch for changes in the templates folder
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Println(err)
@@ -69,7 +61,6 @@ func HotReloadHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	// Keep the connection open
 	for {
 		if _, _, err := ws.NextReader(); err != nil {
 			ws.Close()

@@ -1,14 +1,16 @@
 package handlers
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/utils"
 )
 
-func LoginHandler(templates *template.Template) http.HandlerFunc {
+func LoginHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		templates := utils.LoadTemplates()
+
 		err := templates.ExecuteTemplate(w, "login.gohtml", PageData{
 			PageTitle:       "Login - Packlify",
 			PageDescription: "Login to your account to access your Packlify dashboard.",

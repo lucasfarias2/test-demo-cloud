@@ -1,16 +1,18 @@
 package handlers
 
 import (
-	"cloud/middleware"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/middleware"
+	"packlify-cloud/utils"
 )
 
-func DashboardHandler(templates *template.Template) http.HandlerFunc {
+func DashboardHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, _ := r.Context().Value("user").(*middleware.User)
+
+		templates := utils.LoadTemplates()
 
 		err := templates.ExecuteTemplate(w, "dashboard.gohtml", PageData{
 			PageTitle:       "Dashboard - Packlify",

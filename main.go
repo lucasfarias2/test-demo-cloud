@@ -1,19 +1,18 @@
 package main
 
 import (
-	"cloud/handlers"
-	"cloud/handlers/api"
-	"cloud/middleware"
-	"cloud/utils"
 	"context"
 	firebase "firebase.google.com/go"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"google.golang.org/api/option"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/handlers"
+	"packlify-cloud/handlers/api"
+	"packlify-cloud/middleware"
+	"packlify-cloud/utils"
 )
 
 func main() {
@@ -22,6 +21,8 @@ func main() {
 	_ = utils.LoadEnv(".env")
 
 	isProd := os.Getenv("APP_ENV") == "production"
+
+	utils.InitTemplates()
 
 	config := &firebase.Config{
 		ProjectID: "packlify",
@@ -39,19 +40,16 @@ func main() {
 
 	router.Use(middleware.GetUserMiddleware(authClient))
 
-	templates := template.Must(template.ParseGlob("./templates/**/*.gohtml"))
-
 	if !isProd {
-		router.Use(middleware.TemplateLoader(templates))
 		router.Get("/ws", handlers.HotReloadHandler)
 	}
 
 	router.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
-	router.Get("/", handlers.HomeHandler(templates))
-	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler(templates))
-	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler(templates))
-	router.With(middleware.RequireNoUserMiddleware).Get("/signup", handlers.SignupHandler(templates))
+	router.Get("/", handlers.HomeHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler())
+	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler())
+	router.With(middleware.RequireNoUserMiddleware).Get("/signup", handlers.SignupHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/logout", handlers.LogoutHandler())
 
 	router.Post("/api/v1/login", api.LoginApiHandler(authClient))
@@ -60,7 +58,7 @@ func main() {
 
 	err = http.ListenAndServe(":8080", router)
 	if err != nil {
-		log.Fatalln("Error starting the server")
+		log.Fatalln("Error starting the server", err)
 		return
 	}
 }
