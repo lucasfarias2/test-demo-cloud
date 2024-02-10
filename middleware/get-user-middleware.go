@@ -5,6 +5,7 @@ import (
 	"firebase.google.com/go/auth"
 	"log"
 	"net/http"
+	"os"
 )
 
 type User struct {
@@ -20,6 +21,19 @@ func GetUserMiddleware(authClient *auth.Client) func(http.Handler) http.Handler 
 			cookie, err := r.Cookie("session")
 			if err != nil || cookie == nil {
 				next.ServeHTTP(w, r)
+				return
+			}
+
+			if os.Getenv("APP_ENV") == "development" && os.Getenv("MOCKS_USER") == "true" {
+				user := &User{
+					UID:      "1234",
+					Email:    "mocked@test.com",
+					Name:     "Mocked User",
+					Username: "mockedUserName",
+				}
+
+				ctx := context.WithValue(r.Context(), "user", user)
+				next.ServeHTTP(w, r.WithContext(ctx))
 				return
 			}
 

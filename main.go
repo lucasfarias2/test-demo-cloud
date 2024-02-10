@@ -9,14 +9,18 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/db"
 	"packlify-cloud/handlers"
 	"packlify-cloud/handlers/api"
+	"packlify-cloud/handlers/dashboard"
 	"packlify-cloud/middleware"
 	"packlify-cloud/utils"
 )
 
 func main() {
 	router := chi.NewRouter()
+
+	db.ConnectDatabase()
 
 	_ = utils.LoadEnv(".env")
 
@@ -48,6 +52,8 @@ func main() {
 
 	router.Get("/", handlers.HomeHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects", dashboard.ProjectsHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org", dashboard.OrganizationHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/signup", handlers.SignupHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/logout", handlers.LogoutHandler())

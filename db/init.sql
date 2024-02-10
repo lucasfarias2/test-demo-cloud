@@ -1,19 +1,22 @@
 drop table if exists todos cascade;
 
-create table accounts
+create table organizations
 (
-    id            serial  not null,
-    name          text    not null,
-    admin_user_id integer not null,
+    id            serial not null,
+    name          text   not null,
+    admin_user_id text   not null,
     primary key (id)
 );
 
-create table users
+create table projects
 (
-    id   serial not null,
-    name text   not null,
-    email text not null,
-    primary key (id)
+    id              serial  not null,
+    name            text    not null,
+    organization_id integer not null
 );
 
-insert into users(name, email) values ('user1', 'lucas@asd.com');
+insert into organizations(name, admin_user_id)
+values ('The Database Organization', 'db@test.com');
+
+insert into projects(name, organization_id)
+values ('The Database Project', 1);

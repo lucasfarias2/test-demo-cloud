@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env
+source ../.env
 
 # Function to execute a SQL command
 exec_sql() {
@@ -19,4 +19,4 @@ exec_sql "postgres" "DROP DATABASE IF EXISTS $DB_NAME;"
 exec_sql "postgres" "CREATE DATABASE $DB_NAME;"
 
 # Run SQL script to create tables and seed initial data
-psql "host=localhost dbname=$DB_NAME user=$DB_USER password=$DB_PASSWORD" -a -f ./db/reset.sql
+psql "host=localhost dbname=$DB_NAME user=$DB_USER password=$DB_PASSWORD" -a -f ./init.sql

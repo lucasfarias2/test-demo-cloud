@@ -1,0 +1,26 @@
+{{ define "navbar-logged-in" }}
+    <nav class="h-12 lg:px-32 px-6 flex items-center justify-between relative bg-gray-800 text-gray-300 shadow border-b border-gray-950">
+        <div class="flex items-center justify-center">
+            <a href="/"><img src="/static/logo-icon.png" alt="Packlify logo" class="h-8 min-w-7 mr-4"/></a>
+            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Home</a>
+            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Pricing</a>
+            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Documentation</a>
+        </div>
+        <div class="flex items-center justify-center">
+            <div class="mr-4 font-medium py-1 px-3 rounded-full bg-gray-700 text-gray-400 text-xs">
+                {{ .User.Email }}
+            </div>
+            <a href="/dashboard" hx-get="/dashboard" hx-target="body" hx-push-url="true"
+               class="p-2 mr-2 text-sm">Dashboard</a>
+            <a href="/logout" class="p-2 mr-2 text-sm">Logout</a>
+        </div>
+    </nav>
+    <nav class="h-10 flex items-center px-32 bg-gray-900 text-gray-400 shadow border-b">
+        <a href="/dashboard/projects" class="h-full flex items-center justify-center px-4 text-sm">
+            Your projects
+        </a>
+        <a href="/dashboard/org" class="h-full flex items-center justify-center px-4 text-sm">
+            Your organization
+        </a>
+    </nav>
+{{ end }}
