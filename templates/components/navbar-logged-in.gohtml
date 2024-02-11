@@ -3,8 +3,10 @@
         <div class="flex items-center justify-center">
             <a href="/"><img src="/static/logo-icon.png" alt="Packlify logo" class="h-8 min-w-7 mr-4"/></a>
             <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Home</a>
-            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Pricing</a>
-            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Documentation</a>
+            <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
+               class="p-2 mr-2 text-sm">Your projects</a>
+            <a href="/dashboard/org" hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
+               class="p-2 mr-2 text-sm">Your organizations</a>
         </div>
         <div class="flex items-center justify-center">
             <div class="mr-4 font-medium py-1 px-3 rounded-full bg-gray-700 text-gray-400 text-xs">
@@ -16,10 +18,12 @@
         </div>
     </nav>
     <nav class="h-10 flex items-center px-32 bg-gray-900 text-gray-400 shadow">
-        <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true" class="h-full flex items-center justify-center px-4 text-sm">
+        <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
+           class="h-full flex items-center justify-center px-4 text-sm">
             Your projects
         </a>
-        <a href="/dashboard/org" hx-get="/dashboard/org" hx-target="body" hx-push-url="true" class="h-full flex items-center justify-center px-4 text-sm">
+        <a href="/dashboard/org" hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
+           class="h-full flex items-center justify-center px-4 text-sm">
             Your organization
         </a>
     </nav>

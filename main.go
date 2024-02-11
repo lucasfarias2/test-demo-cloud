@@ -53,6 +53,7 @@ func main() {
 	router.Get("/", handlers.HomeHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects", dashboard.ProjectsHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects/new", dashboard.NewProjectHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org", dashboard.OrganizationHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org/new", dashboard.NewOrgHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler())

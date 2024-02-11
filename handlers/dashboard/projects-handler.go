@@ -28,3 +28,23 @@ func ProjectsHandler() http.HandlerFunc {
 		}
 	}
 }
+
+func NewProjectHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user, _ := r.Context().Value("user").(*middleware.User)
+
+		templates := utils.LoadTemplates()
+
+		err := templates.ExecuteTemplate(w, "new-project.gohtml", handlers.PageData{
+			PageTitle:       "Create new project - Packlify",
+			PageDescription: "Your new project in Packlify",
+			IsProd:          os.Getenv("APP_ENV") == "production",
+			User:            user,
+		})
+		if err != nil {
+			log.Println("Error:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
