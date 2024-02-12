@@ -33,7 +33,7 @@ FROM alpine:latest
 WORKDIR /root/
 
 # Copy the Go executable from the gobuilder stage
-COPY --from=gobuilder /go/src/app/cloud .
+COPY --from=gobuilder /go/src/app/packlify-cloud .
 
 # Copy the templates directory
 COPY --from=gobuilder /go/src/app/templates ./templates
@@ -50,4 +50,4 @@ EXPOSE 8080
 ENV APP_ENV=production
 
 # Command to run the executable
-ENTRYPOINT ["/root/cloud"]
+ENTRYPOINT ["/root/packlify-cloud"]
