@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
-	"net/url"
 	"os"
 )
 
@@ -16,7 +15,7 @@ func ConnectDatabase() {
 	var connectionString string
 	dbUser := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_NAME")
-	dbPassword := url.QueryEscape(os.Getenv("DB_PASSWORD"))
+	dbPassword := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUnixSocket := os.Getenv("DB_UNIX_SOCKET")
