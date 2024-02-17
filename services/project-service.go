@@ -10,7 +10,7 @@ func CreateProject(projReq models.Project) (models.Project, error) {
 
 	var newProj models.Project
 
-	err := database.QueryRow("INSERT INTO projects(name, organization_id) VALUES($1, $2) RETURNING id, organization_id", projReq.Name, projReq.OrganizationID).Scan(&newProj.ID, &newProj.Name, &newProj.OrganizationID)
+	err := database.QueryRow("INSERT INTO projects(name, organization_id) VALUES($1, $2) RETURNING id, name, organization_id", projReq.Name, projReq.OrganizationID).Scan(&newProj.ID, &newProj.Name, &newProj.OrganizationID)
 	if err != nil {
 		return models.Project{}, err
 	}

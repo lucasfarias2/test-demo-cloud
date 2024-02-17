@@ -16,6 +16,10 @@ func ProjectsHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
+		// get account from uid
+		// get organizations from account
+		// get projects from organizations
+
 		err := templates.ExecuteTemplate(w, "projects.gohtml", handlers.PageData{
 			PageTitle:       "Your projects - Packlify",
 			PageDescription: "Your projects in Packlify",

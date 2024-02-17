@@ -24,7 +24,7 @@ func ConnectDatabase() {
 		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s port=%s", dbUser, dbPassword, dbName, dbHost, dbPort)
 	} else {
 		log.Printf("Connecting to local database: host=%s port=%s", dbHost, dbPort)
-		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s port=%s sslmode=disable", dbUser, dbPassword, dbName, dbHost, dbPort)
+		connectionString = fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=disable", dbUser, dbName, dbPassword, dbHost, dbPort)
 	}
 
 	db, err = sql.Open("postgres", connectionString)
