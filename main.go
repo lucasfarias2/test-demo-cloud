@@ -62,6 +62,7 @@ func main() {
 
 	router.Post("/api/v1/login", api.LoginApiHandler(authClient))
 	router.Post("/api/v1/organization", api.CreateOrganizationApiHandler)
+	router.Post("/api/v1/project", api.CreateProjectApiHandler)
 
 	fmt.Println("Server running on port 8080")
 

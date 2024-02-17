@@ -25,13 +25,28 @@
 
             <div class="flex">
                 <label for="admin_user_id" class="text-left text-sm w-full">Admin User
-                    <div class="text-xs text-gray-500">By default is the creator. You will be able to change it later.
+                    <div class="text-xs text-gray-500">By default is the creator. You will be able to change it
+                        later.
                     </div>
                 </label>
                 <input type="text" disabled value="{{.User.UID}}"
                        class="rounded-lg px-3 py-3 w-full mb-4 text-sm border"
                 />
             </div>
+
+            {{ if .Organizations }}
+                <div class="flex">
+                    <label for="organization_id" class="text-left text-sm w-full">Organization
+                        <div class="text-xs text-gray-500">You will be able to change it later.</div>
+                    </label>
+                    <select id="organization_id" name="organization_id" required
+                            class="rounded-lg px-3 py-3 w-full mb-4 text-sm border">
+                        {{ range .Organizations }}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            {{ end }}
 
             <a href="/dashboard/projects/new" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
                class="mr-1">
@@ -45,6 +60,7 @@
             </button>
         </form>
     </div>
+
 </main>
 
 <footer class="py-8 text-center text-xs text-gray-500">

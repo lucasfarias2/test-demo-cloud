@@ -10,12 +10,14 @@
                     {{ .User.Email }}
                 </div>
                 <a href="/dashboard" hx-get="/dashboard" hx-target="body" hx-push-url="true"
-                   class="p-2 mr-2 md:text-base text-xs">Dashboard</a>
-                <a href="/logout" class="p-2 mr-2 md:text-base text-xs">Logout</a>
+                   class="py-2 px-3 mr-2 md:text-base text-xs hover:text-black text-gray-500">Dashboard</a>
+                <a href="/logout" class="py-2 px-3 md:text-base text-xs hover:text-black text-gray-500">Logout</a>
             {{ else }}
-                <a href="/login" hx-get="/login" hx-target="body" class="p-2 mr-2 md:text-base text-xs"
+                <a href="/login" hx-get="/login" hx-target="body" data-packlify-navlink
+                   class="p-2 mr-2 md:text-base text-xs hover:text-black text-gray-500"
                    hx-push-url="true">Sign in</a>
-                <a href="/signup" hx-get="/signup" hx-target="body" class="p-2 mr-2 md:text-base text-xs"
+                <a href="/signup" hx-get="/signup" hx-target="body"
+                   class="p-2 mr-2 md:text-base text-xs hover:text-black text-gray-500"
                    hx-push-url="true">Create
                     account</a>
             {{ end }}

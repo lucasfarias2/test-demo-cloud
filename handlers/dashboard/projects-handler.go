@@ -6,6 +6,7 @@ import (
 	"os"
 	"packlify-cloud/handlers"
 	"packlify-cloud/middleware"
+	"packlify-cloud/services"
 	"packlify-cloud/utils"
 )
 
@@ -35,11 +36,14 @@ func NewProjectHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
+		organizations, _ := services.GetUserOrganizations(user.UID)
+
 		err := templates.ExecuteTemplate(w, "new-project.gohtml", handlers.PageData{
 			PageTitle:       "Create new project - Packlify",
 			PageDescription: "Your new project in Packlify",
 			IsProd:          os.Getenv("APP_ENV") == "production",
 			User:            user,
+			Organizations:   organizations,
 		})
 		if err != nil {
 			log.Println("Error:", err)

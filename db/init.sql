@@ -13,6 +13,20 @@ create table projects
 (
     id              serial  not null,
     name            text    not null,
+    organization_id integer not null,
+    primary key (id)
+);
+
+create table accounts
+(
+    id   serial not null,
+    uuid text   not null,
+    primary key (id)
+);
+
+create table account_organization
+(
+    account_id      integer not null,
     organization_id integer not null
 );
 

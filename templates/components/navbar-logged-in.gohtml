@@ -1,30 +1,51 @@
 {{ define "navbar-logged-in" }}
-    <nav class="h-12 lg:px-32 px-6 flex items-center justify-between relative bg-gray-800 text-gray-300">
+    <nav class="h-14 lg:px-32 px-6 flex items-center justify-between relative bg-gray-800 text-gray-300 shadow border-b">
         <div class="flex items-center justify-center">
             <a href="/"><img src="/static/logo-icon.png" alt="Packlify logo" class="h-8 min-w-7 mr-4"/></a>
-            <a href="/" hx-get="/" hx-target="body" hx-push-url="true" class="p-2 mr-2 text-sm">Home</a>
-            <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
-               class="p-2 mr-2 text-sm">Your projects</a>
-            <a href="/dashboard/org" hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
-               class="p-2 mr-2 text-sm">Your organizations</a>
+            <a href="/" hx-get="/" hx-target="body" hx-push-url="true"
+               class="py-2 px-3 mr-2 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg">
+                <span class="text-xs text-gray-500 leading-3">Back to</span>
+                <span class="leading-4">Homepage</span>
+            </a>
+            <a href="/dashboard/projects" data-packlify-navlink hx-get="/dashboard/projects" hx-target="body"
+               hx-push-url="true"
+               class="py-2 px-3 mr-2 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg justify-center">
+                <span class="text-xs text-gray-500 leading-3">Your</span>
+                <span class="leading-4">Projects</span>
+            </a>
+            <a href="/dashboard/org" data-packlify-navlink hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
+               class="py-2 px-3 mr-2 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg justify-center">
+                <span class="text-xs text-gray-500 leading-3">Your</span>
+                <span class="leading-4">Organizations</span>
+            </a>
         </div>
         <div class="flex items-center justify-center">
-            <div class="mr-4 font-medium py-1 px-3 rounded-full bg-gray-700 text-gray-400 text-xs">
+            <div class="mr-4 py-1 px-3 rounded-full bg-black/20 text-white/40 text-xs">
                 {{ .User.Email }}
             </div>
-            <a href="/dashboard" hx-get="/dashboard" hx-target="body" hx-push-url="true"
-               class="p-2 mr-2 text-sm">Dashboard</a>
-            <a href="/logout" class="p-2 mr-2 text-sm">Logout</a>
+            <a href="/dashboard" hx-get="/dashboard" data-packlify-navlink hx-target="body" hx-push-url="true"
+               class="py-2 px-3 mr-2 text-sm text-gray-400 rounded-lg hover:bg-gray-500/10">Dashboard</a>
+            <a href="/logout" class="py-2 px-3 mr-2 text-sm text-gray-400 hover:bg-gray-500/10 rounded-lg">Logout</a>
         </div>
     </nav>
-    <nav class="h-10 flex items-center px-32 bg-gray-900 text-gray-400 shadow">
-        <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
-           class="h-full flex items-center justify-center px-4 text-sm">
-            Your projects
-        </a>
-        <a href="/dashboard/org" hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
-           class="h-full flex items-center justify-center px-4 text-sm">
-            Your organization
-        </a>
-    </nav>
+    {{/*    <nav class="h-8 flex items-center px-32 bg-gray-900 text-gray-400 shadow">*/}}
+    {{/*        */}}{{/*        <a href="/dashboard/projects?platform=pack" hx-get="/dashboard/projects?platform=pack" hx-target="body"*/}}
+    {{/*        */}}{{/*           hx-push-url="true"*/}}
+    {{/*        */}}{{/*           class="h-full flex items-center justify-center px-4 text-xs">*/}}
+    {{/*        */}}{{/*            Packlify Cloud*/}}
+    {{/*        */}}{{/*        </a>*/}}
+    {{/*        */}}{{/*        <a href="/dashboard/projects?platform=gcp" hx-get="/dashboard/projects?platform=gcp" hx-target="body"*/}}
+    {{/*        */}}{{/*           hx-push-url="true"*/}}
+    {{/*        */}}{{/*           class="h-full flex items-center justify-center px-4 text-xs">*/}}
+    {{/*        */}}{{/*            Google Cloud*/}}
+    {{/*        */}}{{/*        </a>*/}}
+    {{/*    </nav>*/}}
+
+    <script>
+        document.querySelectorAll('[data-packlify-navlink]').forEach(link => {
+            if (window.location.pathname === link.getAttribute('href')) {
+                link.classList.add('bg-gray-500/10');
+            }
+        });
+    </script>
 {{ end }}
