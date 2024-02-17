@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
-	"net/url"
 	"os"
 )
 
@@ -19,17 +18,13 @@ func ConnectDatabase() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
-	dbUnixSocket := os.Getenv("DB_UNIX_SOCKET")
 
 	if os.Getenv("APP_ENV") != "development" {
-		log.Printf("Connecting to cloud database: host=/cloudsql/%s", dbUnixSocket)
-		connectionString = fmt.Sprintf("postgres://%s:%s@/cloudsql/%s/%s?sslmode=disable",
-			url.QueryEscape(dbUser), url.QueryEscape(dbPassword), dbUnixSocket, dbName)
+		log.Printf("Connecting to cloud database: host=%s", dbHost)
+		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s port=%s", dbUser, dbPassword, dbName, dbHost, dbPort)
 	} else {
-		log.Printf("Connecting to database: host=%s port=%s", dbHost, dbPort)
-		userInfo := url.UserPassword(dbUser, dbPassword)
-		connectionString = fmt.Sprintf("postgres://%s@%s:%s/%s?sslmode=disable",
-			userInfo.String(), dbHost, dbPort, dbName)
+		log.Printf("Connecting to local database: host=%s port=%s", dbHost, dbPort)
+		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s port=%s sslmode=disable", dbUser, dbPassword, dbName, dbHost, dbPort)
 	}
 
 	db, err = sql.Open("postgres", connectionString)
