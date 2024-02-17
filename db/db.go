@@ -20,11 +20,11 @@ func ConnectDatabase() {
 	dbPort := os.Getenv("DB_PORT")
 	dbUnixSocket := os.Getenv("DB_UNIX_SOCKET")
 
-	log.Printf("Connecting to database: host=%s port=%s", dbHost, dbPort)
-
 	if os.Getenv("APP_ENV") != "development" {
+		log.Printf("Connecting to cloud database: host=/cloudsql/%s", dbUnixSocket)
 		connectionString = fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable host=/cloudsql/%s", dbUser, dbPassword, dbName, dbUnixSocket)
 	} else {
+		log.Printf("Connecting to database: host=%s port=%s", dbHost, dbPort)
 		connectionString = fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=disable", dbUser, dbName, dbPassword, dbHost, dbPort)
 	}
 
