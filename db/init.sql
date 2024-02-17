@@ -1,4 +1,5 @@
-drop table if exists todos cascade;
+drop table if exists organizations cascade;
+drop table if exists projects cascade;
 
 create table organizations
 (
