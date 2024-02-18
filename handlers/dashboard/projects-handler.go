@@ -16,15 +16,21 @@ func ProjectsHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
-		// get account from uid
-		// get organizations from account
-		// get projects from organizations
+		userAccount, err := services.GetUserAccount(user.UID)
+		if err != nil {
+			log.Println("Can't get user account", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		err := templates.ExecuteTemplate(w, "projects.gohtml", handlers.PageData{
+		projects, _ := services.GetAccountProjects(userAccount.ID)
+
+		err = templates.ExecuteTemplate(w, "projects.gohtml", handlers.PageData{
 			PageTitle:       "Your projects - Packlify",
 			PageDescription: "Your projects in Packlify",
 			IsProd:          os.Getenv("APP_ENV") == "production",
 			User:            user,
+			Projects:        projects,
 		})
 		if err != nil {
 			log.Println("Error:", err)
@@ -40,14 +46,24 @@ func NewProjectHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
-		organizations, _ := services.GetUserOrganizations(user.UID)
+		userAccount, err := services.GetUserAccount(user.UID)
+		if err != nil {
+			log.Println("Can't get user account", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		err := templates.ExecuteTemplate(w, "new-project.gohtml", handlers.PageData{
+		organizations, _ := services.GetAccountLinkedOrganizations(userAccount.ID)
+
+		toolkits, _ := services.GetToolkits()
+
+		err = templates.ExecuteTemplate(w, "new-project.gohtml", handlers.PageData{
 			PageTitle:       "Create new project - Packlify",
 			PageDescription: "Your new project in Packlify",
 			IsProd:          os.Getenv("APP_ENV") == "production",
 			User:            user,
 			Organizations:   organizations,
+			Toolkits:        toolkits,
 		})
 		if err != nil {
 			log.Println("Error:", err)

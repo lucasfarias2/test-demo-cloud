@@ -32,18 +32,13 @@
             {{ end }}
         </div>
     {{ else }}
-        <h2 class="mb-4 text-lg text-gray-400">You don't have an organization yet.</h2>
-        <a href="/dashboard/org/new" hx-get="/dashboard/org/new" hx-target="body" hx-push-url="true">
-            <button class="rounded-full bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
-                organization
-            </button>
-        </a>
+        <div class="bg-white rounded-lg shadow py-12 text-center">
+            <h2 class="text-lg text-gray-400">You don't have any organizations yet.</h2>
+        </div>
     {{ end }}
 </main>
 
-<footer class="py-8 text-center text-xs text-gray-500">
-    © Packlify.com - Developed by Lucas Farias.
-</footer>
+{{ template "footer". }}
 
 </body>
 

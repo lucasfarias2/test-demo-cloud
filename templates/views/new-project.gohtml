@@ -39,6 +39,23 @@
                 </div>
             {{ end }}
 
+            {{ if .Toolkits }}
+                <div class="flex">
+                    <label for="toolkit_id" class="text-left text-sm w-full">Toolkit
+                        <div class="text-xs text-gray-500">This will be the starter of your application. Leave blank if
+                            you want to use an existing repository.
+                        </div>
+                    </label>
+                    <select id="toolkit_id" name="toolkit_id" required
+                            class="rounded-lg px-3 py-3 w-full mb-4 text-sm border">
+                        {{ range .Toolkits }}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            {{ end }}
+
+
             <a href="/dashboard/projects" hx-get="/dashboard/projects" hx-target="body" hx-push-url="true"
                class="mr-1">
                 <button class="rounded-lg bg-white border p-2 px-4 text-sm font-medium">Cancel
@@ -52,9 +69,7 @@
 
 </main>
 
-<footer class="py-8 text-center text-xs text-gray-500">
-    © Packlify.com - Developed by Lucas Farias.
-</footer>
+{{ template "footer". }}
 
 </body>
 

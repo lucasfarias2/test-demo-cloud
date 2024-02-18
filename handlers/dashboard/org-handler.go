@@ -16,7 +16,9 @@ func OrganizationHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
-		organizations, _ := services.GetUserOrganizations(user.UID)
+		userAccount, _ := services.GetUserAccount(user.UID)
+
+		organizations, _ := services.GetAccountLinkedOrganizations(userAccount.ID)
 
 		err := templates.ExecuteTemplate(w, "organization.gohtml", handlers.PageData{
 			PageTitle:       "Your organization - Packlify",

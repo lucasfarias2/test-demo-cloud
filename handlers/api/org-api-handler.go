@@ -32,6 +32,20 @@ func CreateOrganizationApiHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userAccount, err := services.GetUserAccount(user.UID)
+	if err != nil {
+		log.Printf("Failed to get user account: %v", err)
+		http.Error(w, "Failed to process request", http.StatusInternalServerError)
+		return
+	}
+
+	err = services.LinkAccountWithOrganization(userAccount.ID, organization.ID)
+	if err != nil {
+		log.Printf("Failed to link account with organization: %v", err)
+		http.Error(w, "Failed to process request", http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("HX-Redirect", "/dashboard/org")
 

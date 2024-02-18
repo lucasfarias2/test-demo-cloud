@@ -25,9 +25,19 @@ func CreateProjectApiHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	toolkitIdStr := r.FormValue("toolkit_id")
+	toolkitId, err := strconv.Atoi(toolkitIdStr)
+	if err != nil {
+		log.Printf("Failed to convert toolkit_id to int: %v", err)
+		http.Error(w, "Invalid toolkit ID", http.StatusBadRequest)
+		return
+
+	}
+
 	newProject := models.Project{
 		Name:           name,
 		OrganizationID: orgId,
+		ToolkitID:      toolkitId,
 	}
 
 	project, err := services.CreateProject(newProject)
