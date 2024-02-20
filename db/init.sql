@@ -15,6 +15,7 @@ create table projects
     name            text    not null,
     organization_id integer not null,
     toolkit_id      integer not null,
+    repository_url  text    not null,
     primary key (id)
 );
 

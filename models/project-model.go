@@ -5,6 +5,7 @@ type Project struct {
 	Name           string `json:"name"`
 	OrganizationID int    `json:"organization_id"`
 	ToolkitID      int    `json:"toolkit_id,omitempty"`
+	RepositoryURL  string `json:"repository_url,omitempty"`
 }
 
 type ProjectView struct {
@@ -14,4 +15,5 @@ type ProjectView struct {
 	ToolkitID      int    `json:"toolkit_id,omitempty"`
 	OrgName        string `json:"org_name"`
 	ToolkitName    string `json:"toolkit_name,omitempty"`
+	RepositoryURL  string `json:"repository_url,omitempty"`
 }
