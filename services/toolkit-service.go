@@ -8,7 +8,7 @@ import (
 func GetToolkits() ([]models.Toolkit, error) {
 	database := db.GetDB()
 
-	rows, err := database.Query("SELECT id, name, repository_url FROM toolkits")
+	rows, err := database.Query("SELECT id, name, repository_url, image_url FROM toolkits")
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +17,7 @@ func GetToolkits() ([]models.Toolkit, error) {
 
 	for rows.Next() {
 		var toolkit models.Toolkit
-		if err := rows.Scan(&toolkit.ID, &toolkit.Name, &toolkit.RepositoryURL); err != nil {
+		if err := rows.Scan(&toolkit.ID, &toolkit.Name, &toolkit.RepositoryURL, &toolkit.ImageURL); err != nil {
 			return nil, err
 		}
 		toolkits = append(toolkits, toolkit)

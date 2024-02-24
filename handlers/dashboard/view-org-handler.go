@@ -32,7 +32,7 @@ func ViewOrgHandler() http.HandlerFunc {
 		canUserReadOrg, err := services.CheckAccountCanReadOrg(userAccount.ID, orgIdInt)
 		if err != nil || !canUserReadOrg {
 			log.Printf("Failed to check if user can read org: %v", err)
-			http.Error(w, "Failed to process request", http.StatusForbidden)
+			handlers.NotFoundHandler(w, r)
 			return
 		}
 

@@ -5,7 +5,7 @@ import (
 	"packlify-cloud/models"
 )
 
-func CreateOrganization(orgReq models.Org, accountID int) (models.Org, error) {
+func CreateOrganization(orgReq models.Org, accID int) (models.Org, error) {
 	database := db.GetDB()
 
 	var newOrg models.Org
@@ -15,7 +15,7 @@ func CreateOrganization(orgReq models.Org, accountID int) (models.Org, error) {
 		return models.Org{}, err
 	}
 
-	err = LinkAccountWithOrganization(accountID, newOrg.ID)
+	err = LinkToOrgAsAdmin(accID, newOrg.ID)
 	if err != nil {
 		return models.Org{}, err
 	}
@@ -23,12 +23,25 @@ func CreateOrganization(orgReq models.Org, accountID int) (models.Org, error) {
 	return newOrg, nil
 }
 
-func LinkAccountWithOrganization(accountID, organizationID int) error {
+func LinkToOrgAsAdmin(accID, orgID int) error {
 	database := db.GetDB()
 
 	adminRole, _ := GetAdminRole()
 
-	_, err := database.Exec("INSERT INTO account_organization(account_id, organization_id, role_id) VALUES($1, $2, $3)", accountID, organizationID, adminRole.ID)
+	_, err := database.Exec("INSERT INTO account_organization(account_id, organization_id, role_id) VALUES($1, $2, $3)", accID, orgID, adminRole.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func LinkToOrgAsMember(accID, orgID int) error {
+	database := db.GetDB()
+
+	memberRole, _ := GetMemberRole()
+
+	_, err := database.Exec("INSERT INTO account_organization(account_id, organization_id, role_id) VALUES($1, $2, $3)", accID, orgID, memberRole.ID)
 	if err != nil {
 		return err
 	}
@@ -74,6 +87,20 @@ func GetOrganizationById(orgID int) (models.Org, error) {
 	return org, nil
 }
 
+func GetAccountRoleInOrganization(accountID, orgID int) (models.Role, error) {
+	database := db.GetDB()
+
+	var role models.Role
+
+	err := database.QueryRow("SELECT r.id, r.name FROM roles r JOIN account_organization ao ON r.id = ao.role_id WHERE ao.account_id = $1 AND ao.organization_id = $2", accountID, orgID).Scan(&role.ID, &role.Name)
+	if err != nil {
+		return models.Role{}, err
+	}
+
+	return role, nil
+
+}
+
 func CheckAccountCanReadOrg(accountID, orgID int) (bool, error) {
 	database := db.GetDB()
 
@@ -103,7 +130,7 @@ func CheckAccountCanWriteOrg(accountID, orgID int) (bool, error) {
 	return count > 0, nil
 }
 
-func CheckAccountCanAdmin(orgID, accountID int) (bool, error) {
+func CheckAccountCanAdminOrg(orgID, accountID int) (bool, error) {
 	database := db.GetDB()
 
 	adminRole, _ := GetAdminRole()

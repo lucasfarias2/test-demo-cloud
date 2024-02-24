@@ -26,12 +26,14 @@ type ProjectView struct {
 	OrgName        string `json:"org_name"`
 	ToolkitName    string `json:"toolkit_name,omitempty"`
 	RepositoryURL  string `json:"repository_url,omitempty"`
+	ImageURL       string `json:"image_url,omitempty"`
 }
 
 type Toolkit struct {
 	ID            int    `json:"id"`
 	Name          string `json:"name"`
 	RepositoryURL string `json:"repository_url"`
+	ImageURL      string `json:"image_url"`
 }
 
 type Role struct {

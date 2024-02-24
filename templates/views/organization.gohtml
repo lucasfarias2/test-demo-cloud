@@ -25,11 +25,11 @@
             {{ range .Organizations }}
                 <a href="/dashboard/org/{{ .ID }}" hx-get="/dashboard/org/{{ .ID }}" hx-target="body"
                    hx-push-url="true">
-                    <div class="p-4 shadow rounded-lg bg-white">
-                        <div>
-                            {{/*                            <img src="{{ .Logo }}" alt="{{ .Name }}" class="w-16 h-16 rounded-full">*/}}
+                    <div class="p-2 shadow rounded-lg bg-white flex items-center">
+                        <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-4 text-gray-400 font-medium">
+                            {{ slice .Name 0 2 }}
                         </div>
-                        <h3 class="text-lg font-medium">{{ .Name }}</h3>
+                        <h3 class="text-lg">{{ .Name }}</h3>
                     </div>
                 </a>
             {{ end }}

@@ -22,7 +22,7 @@ func CreateProject(projReq models.Project) (models.Project, error) {
 func GetAccountProjects(accountID int) ([]models.ProjectView, error) {
 	database := db.GetDB()
 
-	rows, err := database.Query("SELECT p.id, p.name, p.toolkit_id, p.organization_id, o.name, t.name FROM projects p JOIN organizations o ON p.organization_id = o.id JOIN account_organization ao ON o.id = ao.organization_id JOIN toolkits t ON p.toolkit_id = t.id WHERE ao.account_id = $1", accountID)
+	rows, err := database.Query("SELECT p.id, p.name, p.toolkit_id, p.organization_id, o.name, t.name, t.image_url FROM projects p JOIN organizations o ON p.organization_id = o.id JOIN account_organization ao ON o.id = ao.organization_id JOIN toolkits t ON p.toolkit_id = t.id WHERE ao.account_id = $1", accountID)
 	if err != nil {
 		log.Println("Error getting account projects:", err)
 		return nil, err
@@ -32,7 +32,7 @@ func GetAccountProjects(accountID int) ([]models.ProjectView, error) {
 
 	for rows.Next() {
 		var proj models.ProjectView
-		if err := rows.Scan(&proj.ID, &proj.Name, &proj.ToolkitID, &proj.OrganizationID, &proj.OrgName, &proj.ToolkitName); err != nil {
+		if err := rows.Scan(&proj.ID, &proj.Name, &proj.ToolkitID, &proj.OrganizationID, &proj.OrgName, &proj.ToolkitName, &proj.ImageURL); err != nil {
 			return nil, err
 		}
 		projects = append(projects, proj)
