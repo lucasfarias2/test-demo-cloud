@@ -6,13 +6,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/services"
 )
 
 type User struct {
-	UID      string `json:"uid"`
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
+	UID       string `json:"uid"`
+	Email     string `json:"email"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	AccountID int    `json:"account_id"`
 }
 
 func GetUserMiddleware(authClient *auth.Client) func(http.Handler) http.Handler {
@@ -51,11 +53,19 @@ func GetUserMiddleware(authClient *auth.Client) func(http.Handler) http.Handler 
 				return
 			}
 
+			account, err := services.GetUserAccount(token.UID)
+			if err != nil || account == nil {
+				log.Printf("Failed to get user account: %v", err)
+				next.ServeHTTP(w, r)
+				return
+			}
+
 			user := &User{
-				UID:      userRecord.UID,
-				Email:    userRecord.Email,
-				Name:     userRecord.DisplayName,
-				Username: userRecord.Email,
+				UID:       userRecord.UID,
+				Email:     userRecord.Email,
+				Name:      userRecord.DisplayName,
+				Username:  userRecord.Email,
+				AccountID: account.ID,
 			}
 
 			ctx := context.WithValue(r.Context(), "user", user)

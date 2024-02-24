@@ -6,6 +6,7 @@ import (
 	"firebase.google.com/go/auth"
 	"log"
 	"net/http"
+	"packlify-cloud/services"
 	"time"
 )
 
@@ -45,6 +46,23 @@ func LoginApiHandler(authClient *auth.Client) http.HandlerFunc {
 
 		responseData := loginResponseData{
 			SessionToken: sessionToken,
+		}
+
+		token, err := authClient.VerifySessionCookieAndCheckRevoked(r.Context(), sessionToken)
+		if err != nil {
+			log.Printf("Failed to verify session cookie: %v", err)
+			http.Error(w, "Failed to verify session cookie", http.StatusInternalServerError)
+			return
+		}
+
+		userAccount, err := services.GetUserAccount(token.UID)
+		if err != nil || userAccount == nil {
+			_, err := services.CreateAccount(token.UID)
+			if err != nil {
+				log.Printf("Failed to create account: %v", err)
+				http.Error(w, "Failed to create account", http.StatusInternalServerError)
+				return
+			}
 		}
 
 		w.Header().Set("Content-Type", "application/json")

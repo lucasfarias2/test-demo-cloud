@@ -5,23 +5,29 @@ import (
 	"packlify-cloud/models"
 )
 
-func GetUserAccount(uuid string) (models.Account, error) {
+func GetUserAccount(uuid string) (*models.Account, error) {
 	database := db.GetDB()
-
-	row, err := database.Query("SELECT id, uuid FROM accounts WHERE uuid = $1 LIMIT 1", uuid)
-	if err != nil {
-		return models.Account{}, err
-	}
 
 	var account models.Account
 
-	var acc models.Account
+	err := database.QueryRow("SELECT id, uuid FROM accounts WHERE uuid = $1", uuid).Scan(&account.ID, &account.UUID)
+	if err != nil {
+		return nil, err
+	} else if account == (models.Account{}) {
+		return nil, nil
+	}
 
-	for row.Next() {
-		if err := row.Scan(&acc.ID, &acc.UUID); err != nil {
-			return models.Account{}, err
-		}
-		account = acc
+	return &account, nil
+}
+
+func CreateAccount(uuid string) (models.Account, error) {
+	database := db.GetDB()
+
+	var account models.Account
+
+	err := database.QueryRow("INSERT INTO accounts(uuid) VALUES($1) RETURNING id, uuid", uuid).Scan(&account.ID, &account.UUID)
+	if err != nil {
+		return models.Account{}, err
 	}
 
 	return account, nil

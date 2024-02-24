@@ -7,29 +7,40 @@
 
 {{ template "navbar-logged-in". }}
 
-<main class="px-32 py-8">
-    <div class="flex items-center justify-between">
+<main class="md:px-32 py-8 px-6">
+    <div class="flex items-center justify-between border-b mb-4">
         <div>
             <h1 class="font-medium text-2xl">Your projects</h1>
             <div class="text-sm text-gray-500 mb-4">This is a summary of your projects.</div>
         </div>
-        <a href="/dashboard/projects/new" hx-get="/dashboard/projects/new" hx-target="body" hx-push-url="true">
-            <button class="rounded-lg bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
-                project
-            </button>
-        </a>
+        {{ .Organizations }}
+        {{ if .Organizations }}
+            <a href="/dashboard/projects/new" hx-get="/dashboard/projects/new" hx-target="body" hx-push-url="true">
+                <button class="rounded-lg bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
+                    project
+                </button>
+            </a>
+        {{ else }}
+            <a href="/dashboard/org/new" hx-get="/dashboard/org/new" hx-target="body"
+               hx-push-url="true">
+                <button class="rounded-lg bg-gray-800 text-white p-2 px-4 text-sm font-medium ml-2">Create new
+                    organization
+                </button>
+            </a>
+        {{ end }}
     </div>
 
     {{ if .Projects }}
         {{ range $orgName, $projects := .Projects }}
-            <div class="p-4 bg-white rounded-lg shadow-sm mb-4">
+            <div class="mb-6">
                 <h2 class="mb-4 text-lg font-medium">{{ $orgName }}</h2>
-                <div class="grid grid-cols-3 gap-2">
+                <div class="bg-white rounded-lg shadow mb-4 p-2 grid grid-cols-3 gap-2">
                     {{ range $projects }}
                         <a href="/dashboard/projects/{{ .ID }}" hx-get="/dashboard/projects/{{ .ID }}" hx-target="body"
-                           hx-push-url="true" class="p-2 hover:bg-gray-50 rounded-lg flex items-center hover:bg-gray-50">
-                            <div class="mr-4 rounded-lg p-2">
-                                <img src="{{ .ImageURL }}" alt="{{ .Name }}" class="rounded-lg w-16 h-16 object-contain"/>
+                           hx-push-url="true"
+                           class="p-2 rounded-lg flex items-center hover:bg-gray-50">
+                            <div class="mr-4 rounded-lg p-1">
+                                <img src="{{ .ImageURL }}" alt="{{ .Name }}" class="rounded-lg w-8 h-8 object-contain"/>
                             </div>
                             <div>
                                 <h2 class="text-lg leading-tight">{{ .Name }}</h2>
@@ -40,18 +51,23 @@
                 </div>
             </div>
         {{ end }}
+    {{ else if not .Organizations }}
+        <div class="bg-white rounded-lg shadow p-2">
+            <div class="p-4 bg-gray-50 rounded-lg text-gray-600 flex items-center">
+                <div class="w-6 mr-2">
+                    {{ template "infoIcon" }}
+                </div>
+                <div>Your account has to be linked to an organization in order to manage projects.</div>
+            </div>
+        </div>
     {{ else }}
-        <div class="bg-white rounded-lg shadow-sm py-12 text-center">
+        <div class="bg-white rounded-lg shadow py-12 text-center">
             <h2 class="text-lg text-gray-400">You don't have any projects yet.</h2>
         </div>
     {{ end }}
 
 
 </main>
-
-<script>
-    console.log("PRojectS", {{ .Projects }})
-</script>
 
 {{ template "footer". }}
 

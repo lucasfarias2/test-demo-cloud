@@ -20,12 +20,7 @@ func CreateOrganizationApiHandler(w http.ResponseWriter, r *http.Request) {
 
 	user := r.Context().Value("user").(*middleware.User)
 
-	userAccount, err := services.GetUserAccount(user.UID)
-	if err != nil {
-		log.Printf("Failed to get user account: %v", err)
-		http.Error(w, "Failed to process request", http.StatusInternalServerError)
-		return
-	}
+	userAccount, _ := services.GetUserAccount(user.UID)
 
 	newOrganization := models.Org{
 		Name: name,

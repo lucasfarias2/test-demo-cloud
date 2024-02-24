@@ -8,7 +8,7 @@
 {{ template "navbar-logged-in". }}
 
 <main class="px-32 py-8">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between border-b mb-4">
         <div>
             <h1 class="font-medium text-2xl">Your organizations</h1>
             <div class="text-sm text-gray-500 mb-4">This is a summary of your organizations.</div>
@@ -25,7 +25,7 @@
             {{ range .Organizations }}
                 <a href="/dashboard/org/{{ .ID }}" hx-get="/dashboard/org/{{ .ID }}" hx-target="body"
                    hx-push-url="true">
-                    <div class="p-2 shadow-sm rounded-lg bg-white flex items-center">
+                    <div class="p-2 shadow rounded-lg hover:shadow-md bg-white flex items-center">
                         <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-4 text-gray-400 font-medium">
                             {{ slice .Name 0 2 }}
                         </div>
@@ -35,7 +35,7 @@
             {{ end }}
         </div>
     {{ else }}
-        <div class="bg-white rounded-lg shadow-sm py-12 text-center">
+        <div class="bg-white rounded-lg shadow py-12 text-center">
             <h2 class="text-lg text-gray-400">You don't have any organizations yet.</h2>
         </div>
     {{ end }}
