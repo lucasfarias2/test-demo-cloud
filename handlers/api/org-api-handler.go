@@ -20,18 +20,6 @@ func CreateOrganizationApiHandler(w http.ResponseWriter, r *http.Request) {
 
 	user := r.Context().Value("user").(*middleware.User)
 
-	newOrganization := models.Org{
-		Name:        name,
-		AdminUserID: user.UID,
-	}
-
-	organization, err := services.CreateOrganization(newOrganization)
-	if err != nil {
-		log.Printf("Failed to create organization: %v", err)
-		http.Error(w, "Failed to process request", http.StatusInternalServerError)
-		return
-	}
-
 	userAccount, err := services.GetUserAccount(user.UID)
 	if err != nil {
 		log.Printf("Failed to get user account: %v", err)
@@ -39,9 +27,13 @@ func CreateOrganizationApiHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = services.LinkAccountWithOrganization(userAccount.ID, organization.ID)
+	newOrganization := models.Org{
+		Name: name,
+	}
+
+	organization, err := services.CreateOrganization(newOrganization, userAccount.ID)
 	if err != nil {
-		log.Printf("Failed to link account with organization: %v", err)
+		log.Printf("Failed to create organization: %v", err)
 		http.Error(w, "Failed to process request", http.StatusInternalServerError)
 		return
 	}

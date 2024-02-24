@@ -1,9 +1,10 @@
-package handlers
+package dashboard
 
 import (
 	"log"
 	"net/http"
 	"os"
+	"packlify-cloud/handlers"
 	"packlify-cloud/middleware"
 	"packlify-cloud/utils"
 )
@@ -14,7 +15,7 @@ func DashboardHandler() http.HandlerFunc {
 
 		templates := utils.LoadTemplates()
 
-		err := templates.ExecuteTemplate(w, "dashboard.gohtml", PageData{
+		err := templates.ExecuteTemplate(w, "dashboard.gohtml", handlers.PageData{
 			PageTitle:       "Dashboard - Packlify",
 			PageDescription: "Your Packlify dashboard.",
 			IsProd:          os.Getenv("APP_ENV") == "production",

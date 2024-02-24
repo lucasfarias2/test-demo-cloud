@@ -51,11 +51,15 @@ func main() {
 	router.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	router.Get("/", handlers.HomeHandler())
-	router.With(middleware.RequireUserMiddleware).Get("/dashboard", handlers.DashboardHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard", dashboard.DashboardHandler())
+
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects", dashboard.ProjectsHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects/new", dashboard.NewProjectHandler())
+
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org", dashboard.OrganizationHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org/{id}", dashboard.ViewOrgHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org/new", dashboard.NewOrgHandler())
+
 	router.With(middleware.RequireNoUserMiddleware).Get("/login", handlers.LoginHandler())
 	router.With(middleware.RequireNoUserMiddleware).Get("/signup", handlers.SignupHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/logout", handlers.LogoutHandler())
@@ -63,6 +67,8 @@ func main() {
 	router.Post("/api/v1/login", api.LoginApiHandler(authClient))
 	router.Post("/api/v1/organization", api.CreateOrganizationApiHandler)
 	router.Post("/api/v1/project", api.CreateProjectApiHandler)
+
+	router.NotFound(handlers.NotFoundHandler)
 
 	fmt.Println("Server running on port 8080")
 

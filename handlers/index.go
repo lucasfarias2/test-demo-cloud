@@ -14,4 +14,6 @@ type PageData struct {
 	Organizations   []models.Org
 	Projects        []models.ProjectView
 	Toolkits        []models.Toolkit
+	Organization    models.Org
+	Project         models.ProjectView
 }
