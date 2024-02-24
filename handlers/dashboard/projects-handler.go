@@ -21,6 +21,8 @@ func ProjectsHandler() http.HandlerFunc {
 
 		projects, _ := services.GetAccountProjects(userAccount.ID)
 
+		organizations, _ := services.GetAccountLinkedOrganizations(userAccount.ID)
+
 		projectsByOrg := make(map[string][]models.ProjectView)
 		for _, project := range projects {
 			projectsByOrg[project.OrgName] = append(projectsByOrg[project.OrgName], project)
@@ -31,6 +33,7 @@ func ProjectsHandler() http.HandlerFunc {
 			"PageDescription": "Your projects in Packlify",
 			"IsProd":          os.Getenv("APP_ENV") == "production",
 			"User":            user,
+			"Organizations":   organizations,
 			"Projects":        projectsByOrg,
 		})
 		if err != nil {
