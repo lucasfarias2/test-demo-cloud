@@ -40,3 +40,29 @@ func GetAccountProjects(accountID int) ([]models.ProjectView, error) {
 
 	return projects, nil
 }
+
+func GetProjectById(projectID int) (models.Project, error) {
+	database := db.GetDB()
+
+	var proj models.Project
+
+	err := database.QueryRow("SELECT id, name, organization_id, toolkit_id FROM projects WHERE id = $1", projectID).Scan(&proj.ID, &proj.Name, &proj.OrganizationID, &proj.ToolkitID)
+	if err != nil {
+		return models.Project{}, err
+	}
+
+	return proj, nil
+}
+
+func GetProjectDetails(projectID int) (models.ProjectView, error) {
+	database := db.GetDB()
+
+	var proj models.ProjectView
+
+	err := database.QueryRow("SELECT p.id, p.name, p.organization_id, p.toolkit_id, o.name, t.name, t.image_url FROM projects p JOIN organizations o ON p.organization_id = o.id JOIN toolkits t ON p.toolkit_id = t.id WHERE p.id = $1", projectID).Scan(&proj.ID, &proj.Name, &proj.OrganizationID, &proj.ToolkitID, &proj.OrgName, &proj.ToolkitName, &proj.ImageURL)
+	if err != nil {
+		return models.ProjectView{}, err
+	}
+
+	return proj, nil
+}

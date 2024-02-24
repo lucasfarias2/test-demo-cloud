@@ -6,6 +6,7 @@ import (
 	"os"
 	"packlify-cloud/handlers"
 	"packlify-cloud/middleware"
+	"packlify-cloud/models"
 	"packlify-cloud/services"
 	"packlify-cloud/utils"
 )
@@ -25,12 +26,17 @@ func ProjectsHandler() http.HandlerFunc {
 
 		projects, _ := services.GetAccountProjects(userAccount.ID)
 
-		err = templates.ExecuteTemplate(w, "projects.gohtml", handlers.PageData{
-			PageTitle:       "Your projects - Packlify",
-			PageDescription: "Your projects in Packlify",
-			IsProd:          os.Getenv("APP_ENV") == "production",
-			User:            user,
-			Projects:        projects,
+		projectsByOrg := make(map[string][]models.ProjectView)
+		for _, project := range projects {
+			projectsByOrg[project.OrgName] = append(projectsByOrg[project.OrgName], project)
+		}
+
+		err = templates.ExecuteTemplate(w, "projects.gohtml", map[string]interface{}{
+			"PageTitle":       "Your projects - Packlify",
+			"PageDescription": "Your projects in Packlify",
+			"IsProd":          os.Getenv("APP_ENV") == "production",
+			"User":            user,
+			"Projects":        projectsByOrg,
 		})
 		if err != nil {
 			log.Println("Error:", err)

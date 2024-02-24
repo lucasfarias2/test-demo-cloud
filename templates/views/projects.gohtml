@@ -21,31 +21,37 @@
     </div>
 
     {{ if .Projects }}
-        <div class="grid grid-cols-3 gap-2">
-            {{ range .Projects }}
-                <a href="/dashboard/projects/{{ .ID }}" hx-get="/dashboard/projects/{{ .ID }}" hx-target="body"
-                   hx-push-url="true">
-                    <div class="p-4 shadow-sm rounded-lg bg-white flex items-center">
-                        <div class="mr-4 bg-gray-50 rounded-lg p-2">
-                            <img src="{{ .ImageURL }}" alt="{{ .Name }}" class="rounded-lg w-16 h-16"/>
-                        </div>
-                        <div>
-                            <h2 class="text-lg font-medium leading-tight">{{ .Name }}</h2>
-                            <div class="text-sm text-gray-500 text-xs">{{ .ToolkitName }}</div>
-                            <div class="text-sm text-gray-500 mt-4">{{ .OrgName }}</div>
-                        </div>
-                    </div>
-                </a>
-            {{ end }}
-        </div>
+        {{ range $orgName, $projects := .Projects }}
+            <div class="p-4 bg-white rounded-lg shadow-sm mb-4">
+                <h2 class="mb-4 text-lg font-medium">{{ $orgName }}</h2>
+                <div class="grid grid-cols-3 gap-2">
+                    {{ range $projects }}
+                        <a href="/dashboard/projects/{{ .ID }}" hx-get="/dashboard/projects/{{ .ID }}" hx-target="body"
+                           hx-push-url="true" class="p-2 hover:bg-gray-50 rounded-lg flex items-center hover:bg-gray-50">
+                            <div class="mr-4 rounded-lg p-2">
+                                <img src="{{ .ImageURL }}" alt="{{ .Name }}" class="rounded-lg w-16 h-16 object-contain"/>
+                            </div>
+                            <div>
+                                <h2 class="text-lg leading-tight">{{ .Name }}</h2>
+                                <div class="text-sm text-gray-500 text-xs">{{ .ToolkitName }}</div>
+                            </div>
+                        </a>
+                    {{ end }}
+                </div>
+            </div>
+        {{ end }}
     {{ else }}
-        <div class="bg-white rounded-lg shadow py-12 text-center">
+        <div class="bg-white rounded-lg shadow-sm py-12 text-center">
             <h2 class="text-lg text-gray-400">You don't have any projects yet.</h2>
         </div>
     {{ end }}
 
 
 </main>
+
+<script>
+    console.log("PRojectS", {{ .Projects }})
+</script>
 
 {{ template "footer". }}
 

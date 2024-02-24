@@ -54,6 +54,7 @@ func main() {
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard", dashboard.DashboardHandler())
 
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects", dashboard.ProjectsHandler())
+	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects/{id}", dashboard.ViewProjectHandler())
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/projects/new", dashboard.NewProjectHandler())
 
 	router.With(middleware.RequireUserMiddleware).Get("/dashboard/org", dashboard.OrganizationHandler())

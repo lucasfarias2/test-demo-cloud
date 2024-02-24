@@ -144,3 +144,16 @@ func CheckAccountCanAdminOrg(orgID, accountID int) (bool, error) {
 
 	return count > 0, nil
 }
+
+func GetOrganizationByProjectId(projID int) (models.Org, error) {
+	database := db.GetDB()
+
+	var org models.Org
+
+	err := database.QueryRow("SELECT o.id, o.name FROM organizations o JOIN projects p ON o.id = p.organization_id WHERE p.id = $1", projID).Scan(&org.ID, &org.Name)
+	if err != nil {
+		return models.Org{}, err
+	}
+
+	return org, nil
+}

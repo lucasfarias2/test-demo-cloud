@@ -25,3 +25,16 @@ func GetToolkits() ([]models.Toolkit, error) {
 
 	return toolkits, nil
 }
+
+func GetToolkitById(toolkitID int) (models.Toolkit, error) {
+	database := db.GetDB()
+
+	var toolkit models.Toolkit
+
+	err := database.QueryRow("SELECT id, name, repository_url, image_url FROM toolkits WHERE id = $1", toolkitID).Scan(&toolkit.ID, &toolkit.Name, &toolkit.RepositoryURL, &toolkit.ImageURL)
+	if err != nil {
+		return models.Toolkit{}, err
+	}
+
+	return toolkit, nil
+}

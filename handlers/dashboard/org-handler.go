@@ -20,7 +20,7 @@ func OrganizationHandler() http.HandlerFunc {
 
 		organizations, _ := services.GetAccountLinkedOrganizations(userAccount.ID)
 
-		err := templates.ExecuteTemplate(w, "organization.gohtml", handlers.PageData{
+		err := templates.ExecuteTemplate(w, "organizations.gohtml", handlers.PageData{
 			PageTitle:       "Your organization - Packlify",
 			PageDescription: "Your organizations in Packlify",
 			IsProd:          os.Getenv("APP_ENV") == "production",
