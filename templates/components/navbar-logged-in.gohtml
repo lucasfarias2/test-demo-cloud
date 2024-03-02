@@ -1,34 +1,57 @@
 {{ define "navbar-logged-in" }}
-    <nav class="h-14 lg:px-32 px-6 flex items-center justify-between relative bg-gray-800 text-gray-300 shadow border-b">
-        <div class="flex items-center justify-center">
-            <a href="/"><img src="/static/logo-icon.png" alt="Packlify logo" class="h-8 min-w-7 mr-4"/></a>
-            <a href="/" hx-get="/" hx-target="body" hx-push-url="true"
-               class="py-2 px-3 mr-1 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg">
-                <span class="text-xs text-gray-500 leading-3">Back to</span>
-                <span class="leading-4">Homepage</span>
-            </a>
-            <a href="/dashboard" data-packlify-navlink hx-get="/dashboard" hx-target="body" hx-push-url="true"
-               class="py-2 px-3 mr-1 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg justify-center">
-                <span class="text-xs text-gray-500 leading-3">Your</span>
-                <span class="leading-4">Dashboard</span>
-            </a>
-            <a href="/dashboard/projects" data-packlify-navlink hx-get="/dashboard/projects" hx-target="body"
-               hx-push-url="true"
-               class="py-2 px-3 mr-1 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg justify-center">
-                <span class="text-xs text-gray-500 leading-3">Your</span>
-                <span class="leading-4">Projects</span>
-            </a>
-            <a href="/dashboard/org" data-packlify-navlink hx-get="/dashboard/org" hx-target="body" hx-push-url="true"
-               class="py-2 px-3 mr-1 text-sm text-gray-400 flex flex-col hover:bg-gray-500/10 rounded-lg justify-center">
-                <span class="text-xs text-gray-500 leading-3">Your</span>
-                <span class="leading-4">Organizations</span>
-            </a>
-        </div>
-        <div class="flex items-center justify-center">
-            <div class="mr-4 py-1 px-3 rounded-full bg-black/20 text-white/40 text-xs">
-                {{ .User.Email }}
+    <nav class="h-14 relative bg-gray-800 text-gray-300 shadow border-b">
+        <div class="max-w-[1200px] mx-auto px-4 flex items-center justify-between h-full">
+            <div class="flex items-center justify-center">
+                <a href="/"><img src="/static/logo-icon.png" alt="Packlify logo" class="h-8 min-w-7 mr-4"/></a>
+                <a href="/" hx-get="/" hx-target="body" hx-push-url="true"
+                   class="p-2 mr-1 text-gray-400 flex hover:bg-gray-500/10 rounded-lg items-center">
+                    <div class="w-5 h-5 mr-2 opacity-50">
+                        {{ template "home_icon" }}
+                    </div>
+                    <div class="flex flex-col text-sm">
+                        <span class="text-xs text-gray-500 leading-3">Back to</span>
+                        <span class="leading-4">Homepage</span>
+                    </div>
+                </a>
+                <a href="/dashboard" data-packlify-navlink hx-get="/dashboard" hx-target="body" hx-push-url="true"
+                   class="p-2 mr-1 text-gray-400 flex hover:bg-gray-500/10 rounded-lg items-center">
+                    <div class="w-5 h-5 mr-2 opacity-50">
+                        {{ template "dashboard_icon" }}
+                    </div>
+                    <div class="flex flex-col text-sm">
+                        <span class="text-xs text-gray-500 leading-3">Your</span>
+                        <span class="leading-4">Dashboard</span>
+                    </div>
+                </a>
+                <a href="/dashboard/projects" data-packlify-navlink hx-get="/dashboard/projects" hx-target="body"
+                   hx-push-url="true"
+                   class="p-2 mr-1 text-gray-400 flex hover:bg-gray-500/10 rounded-lg items-center">
+                    <div class="w-5 h-5 mr-2 opacity-50">
+                        {{ template "project_icon" }}
+                    </div>
+                    <div class="flex flex-col text-sm">
+                        <span class="text-xs text-gray-500 leading-3">Your</span>
+                        <span class="leading-4">Projects</span>
+                    </div>
+                </a>
+                <a href="/dashboard/org" data-packlify-navlink hx-get="/dashboard/org" hx-target="body"
+                   hx-push-url="true"
+                   class="p-2 mr-1 text-gray-400 flex hover:bg-gray-500/10 rounded-lg items-center">
+                    <div class="w-5 h-5 mr-2 opacity-50">
+                        {{ template "org_icon" }}
+                    </div>
+                    <div class="flex flex-col text-sm">
+                        <span class="text-xs text-gray-500 leading-3">Your</span>
+                        <span class="leading-4">Organizations</span>
+                    </div>
+                </a>
             </div>
-            <a href="/logout" class="py-2 px-3 text-sm text-gray-400 hover:bg-gray-500/10 rounded-lg">Logout</a>
+            <div class="flex items-center justify-center">
+                <div class="mr-4 py-1 px-3 rounded-full bg-black/20 text-white/40 text-xs">
+                    {{ .User.Email }}
+                </div>
+                <a href="/logout" class="py-2 px-3 text-sm text-gray-400 hover:bg-gray-500/10 rounded-lg">Logout</a>
+            </div>
         </div>
     </nav>
     {{/*    <nav class="h-8 flex items-center px-32 bg-gray-900 text-gray-400 shadow">*/}}

@@ -7,15 +7,44 @@
 
 {{ template "navbar-logged-in". }}
 
-<main class="px-32 py-8">
-    <div class="p-4 shadow rounded-lg bg-white flex items-center">
-        <div class="mr-4 rounded-lg p-2">
-            <img src="{{ .Project.ImageURL }}" alt="{{ .Project.Name }}" class="rounded-lg w-16 h-16 object-contain"/>
+<main class="flex px-4 max-w-[1200px] mx-auto">
+    <div class="w-80 py-4">
+        <div class="text-sm text-gray-700">
+            <div class="flex items-center">
+                <div class="mr-2 rounded-lg p-2">
+                    <img src="{{ .Project.ImageURL }}" alt="{{ .Project.Name }}"
+                         class="rounded-lg w-8 h-12 object-contain"/>
+                </div>
+                <div>
+                    <h2 class="leading-tight brand text-lg">{{ .Project.Name }}</h2>
+                    <div class="text-gray-500 text-xs">{{ .Project.ToolkitName }}</div>
+                </div>
+            </div>
         </div>
-        <div>
-            <h2 class="text-lg font-medium leading-tight">{{ .Project.Name }}</h2>
-            <div class="text-sm text-gray-500 text-xs">{{ .Project.ToolkitName }}</div>
-            <div class="text-sm text-gray-500 mt-4">{{ .Project.OrgName }}</div>
+        <div class="mt-4">
+            <a href="/projects/users" class="py-2 text-sm text-gray-600 hover:text-gray-500 flex">
+                <div class="w-5 mr-2">
+                    {{ template "users_icon" }}
+                </div>
+                Users
+            </a>
+            <a href="/projects/deployments" class="py-2 text-sm text-gray-600 hover:text-gray-500 flex">
+                <div class="w-5 mr-2">
+                    {{ template "deploy_icon" }}
+                </div>
+                Deployments
+            </a>
+            <a href="/projects/delete" class="py-2 text-sm text-gray-600 hover:text-gray-500 flex">
+                <div class="w-5 mr-2">
+                    {{ template "delete_icon" }}
+                </div>
+                Delete project
+            </a>
+        </div>
+    </div>
+    <div class="w-full py-4 ml-4">
+        <div class="bg-white p-4 shadow rounded-lg">
+            asd
         </div>
     </div>
 </main>
